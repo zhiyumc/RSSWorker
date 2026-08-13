@@ -1,11 +1,401 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<title>RSSWorker - Made with ❤</title>
-	</head>
-	<body>
-		<h1>RSSWorker - Made with ❤</h1>
-		<p>See <a href="https://github.com/yllhwa/RSSWorker">GitHub</a> for more information.</p>
-	</body>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>RSSWorker</title>
+	<style>
+		:root {
+			--bg: #f8f9fa;
+			--card-bg: #ffffff;
+			--border: #e2e8f0;
+			--text: #1a202c;
+			--text-secondary: #64748b;
+			--accent: #3b82f6;
+			--accent-light: #eff6ff;
+			--tag-news: #10b981;
+			--tag-notice: #f59e0b;
+		}
+		* { margin: 0; padding: 0; box-sizing: border-box; }
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+			background: var(--bg);
+			color: var(--text);
+			line-height: 1.6;
+		}
+		.header {
+			background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+			color: white;
+			padding: 3rem 1rem;
+			text-align: center;
+		}
+		.header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+		.header p { font-size: 1.1rem; opacity: 0.9; }
+		.header .badges { margin-top: 1rem; display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+		.header .badge {
+			background: rgba(255,255,255,0.15);
+			padding: 0.25rem 0.75rem;
+			border-radius: 1rem;
+			font-size: 0.85rem;
+		}
+		.container { max-width: 1000px; margin: 0 auto; padding: 1.5rem 1rem; }
+		.section {
+			background: var(--card-bg);
+			border-radius: 0.75rem;
+			border: 1px solid var(--border);
+			margin-bottom: 1.5rem;
+			overflow: hidden;
+		}
+		.section-header {
+			padding: 1rem 1.25rem;
+			border-bottom: 1px solid var(--border);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			cursor: pointer;
+			user-select: none;
+			transition: background 0.15s;
+		}
+		.section-header:hover { background: var(--accent-light); }
+		.section-header h2 { font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; }
+		.section-header .count {
+			background: var(--accent);
+			color: white;
+			font-size: 0.75rem;
+			padding: 0.1rem 0.5rem;
+			border-radius: 0.5rem;
+			font-weight: 600;
+		}
+		.section-header .arrow {
+			color: var(--text-secondary);
+			transition: transform 0.2s;
+		}
+		.section.collapsed .arrow { transform: rotate(-90deg); }
+		.section.collapsed .section-body { display: none; }
+		.section-body { padding: 0.5rem 0; }
+		.route-item {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0.5rem 1.25rem;
+			text-decoration: none;
+			color: var(--text);
+			transition: background 0.1s;
+		}
+		.route-item:hover { background: var(--accent-light); }
+		.route-item .route-name { font-size: 0.95rem; }
+		.route-item .route-path {
+			font-family: "SF Mono", "Fira Code", monospace;
+			font-size: 0.82rem;
+			color: var(--accent);
+			background: var(--accent-light);
+			padding: 0.15rem 0.5rem;
+			border-radius: 0.35rem;
+			white-space: nowrap;
+		}
+		.route-item .route-tags { display: flex; gap: 0.35rem; margin-right: 0.75rem; }
+		.route-tag {
+			font-size: 0.68rem;
+			padding: 0.1rem 0.4rem;
+			border-radius: 0.35rem;
+			font-weight: 600;
+		}
+		.route-tag.news { background: #d1fae5; color: #065f46; }
+		.route-tag.notice { background: #fef3c7; color: #92400e; }
+		.footer {
+			text-align: center;
+			padding: 2rem 1rem;
+			color: var(--text-secondary);
+			font-size: 0.9rem;
+		}
+		.footer a { color: var(--accent); text-decoration: none; }
+		.search-box {
+			max-width: 500px;
+			margin: 1rem auto;
+			padding: 0 1rem;
+		}
+		.search-box input {
+			width: 100%;
+			padding: 0.6rem 1rem;
+			border: 1px solid var(--border);
+			border-radius: 0.5rem;
+			font-size: 0.95rem;
+			outline: none;
+			transition: border-color 0.15s;
+		}
+		.search-box input:focus { border-color: var(--accent); }
+		.hidden { display: none !important; }
+		@media (max-width: 640px) {
+			.header h1 { font-size: 1.8rem; }
+			.route-item { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+			.route-item .route-tags { margin-right: 0; margin-top: 0.25rem; }
+		}
+	</style>
+</head>
+<body>
+
+<div class="header">
+	<h1>RSSWorker</h1>
+	<p>轻量级 RSS 订阅工具 / 部署在 Cloudflare Worker 上</p>
+	<div class="badges">
+		<span class="badge">bilibili</span>
+		<span class="badge">telegram</span>
+		<span class="badge">weibo</span>
+		<span class="badge">xiaohongshu</span>
+		<span class="badge">中原科技学院 (101 routes)</span>
+	</div>
+</div>
+
+<div class="search-box">
+	<input type="text" id="searchInput" placeholder="搜索路由..." oninput="filterRoutes()" />
+</div>
+
+<div class="container">
+
+	<!-- 基础路由 -->
+	<div class="section" id="section-basic">
+		<div class="section-header" onclick="toggleSection('section-basic')">
+			<h2>基础路由 <span class="count">5</span></h2>
+			<span class="arrow">&#9660;</span>
+		</div>
+		<div class="section-body">
+			<a class="route-item" href="/rss/bilibili/user/dynamic/1">
+				<span class="route-name">bilibili 动态</span>
+				<span class="route-path">/bilibili/user/dynamic/:uid</span>
+			</a>
+			<a class="route-item" href="/rss/bilibili/user/video/1">
+				<span class="route-name">bilibili 视频</span>
+				<span class="route-path">/bilibili/user/video/:uid</span>
+			</a>
+			<a class="route-item" href="/rss/telegram/channel/telegram">
+				<span class="route-name">telegram 频道</span>
+				<span class="route-path">/telegram/channel/:username</span>
+			</a>
+			<a class="route-item" href="/rss/weibo/user/1">
+				<span class="route-name">weibo 用户</span>
+				<span class="route-path">/weibo/user/:uid</span>
+			</a>
+			<a class="route-item" href="/rss/xiaohongshu/user/5d2aec020000000012037401">
+				<span class="route-name">小红书用户</span>
+				<span class="route-path">/xiaohongshu/user/:uid</span>
+			</a>
+		</div>
+	</div>
+
+	<!-- 中原科技学院 -->
+	<div class="section" id="section-zykj">
+		<div class="section-header" onclick="toggleSection('section-zykj')">
+			<h2><img src="https://www.zykj.edu.cn/images/zhongyuankejixueyuanlogo6.png" alt="" style="width:28px;height:28px;vertical-align:middle;border-radius:4px;" /> 中原科技学院 <span class="count">101</span></h2>
+			<span class="arrow">&#9660;</span>
+		</div>
+		<div class="section-body" id="zykj-routes"></div>
+	</div>
+
+</div>
+
+<div class="footer">
+	<p>RSSWorker - Made with &#10084;</p>
+	<p style="margin-top:0.5rem;"><a href="https://github.com/zhiyumc/RSSWorker">GitHub</a> &middot; 部署在 Cloudflare Worker 上</p>
+</div>
+
+<script>
+var zykjRoutes = [
+	// 学校新闻资讯
+	{ path: "/zykj/school/xxyw", name: "学校要闻", type: "news" },
+	{ path: "/zykj/school/kyjj", name: "科研聚焦", type: "news" },
+	{ path: "/zykj/school/jxdt", name: "教学动态", type: "news" },
+	{ path: "/zykj/school/jcfc", name: "基层风采", type: "news" },
+	{ path: "/zykj/school/mtgz", name: "媒体关注", type: "news" },
+	// 学校通知公告
+	{ path: "/zykj/school/tzgg", name: "通知公告", type: "notice" },
+	// 立心书院
+	{ path: "/zykj/lxsy/news", name: "立心书院 - 立心动态", type: "news" },
+	{ path: "/zykj/lxsy/notice", name: "立心书院 - 通知公告", type: "notice" },
+	// 经济学院
+	{ path: "/zykj/jjxy/news", name: "经济学院 - 学院动态", type: "news" },
+	{ path: "/zykj/jjxy/notice", name: "经济学院 - 通知公告", type: "notice" },
+	// 管理学院
+	{ path: "/zykj/glxy/news", name: "管理学院 - 学院动态", type: "news" },
+	{ path: "/zykj/glxy/notice", name: "管理学院 - 通知公告", type: "notice" },
+	// 鼎元书院
+	{ path: "/zykj/dysy/news", name: "鼎元书院 - 鼎元动态", type: "news" },
+	{ path: "/zykj/dysy/notice", name: "鼎元书院 - 通知公告", type: "notice" },
+	// 土木工程学院
+	{ path: "/zykj/tjxy/news", name: "土木工程学院 - 学院新闻", type: "news" },
+	{ path: "/zykj/tjxy/notice", name: "土木工程学院 - 通知公告", type: "notice" },
+	// 机电工程学院
+	{ path: "/zykj/jdxy/news", name: "机电工程学院 - 学院动态", type: "news" },
+	{ path: "/zykj/jdxy/notice", name: "机电工程学院 - 通知公告", type: "notice" },
+	// 信息工程学院
+	{ path: "/zykj/xxgcxy/news", name: "信息工程学院 - 学院动态", type: "news" },
+	{ path: "/zykj/xxgcxy/notice", name: "信息工程学院 - 通知公告", type: "notice" },
+	// 电气与电子工程学院
+	{ path: "/zykj/dqydzgcxy/news", name: "电气与电子工程学院 - 学院动态", type: "news" },
+	{ path: "/zykj/dqydzgcxy/notice", name: "电气与电子工程学院 - 通知公告", type: "notice" },
+	// 中天书院
+	{ path: "/zykj/ztsy/news", name: "中天书院 - 中天动态", type: "news" },
+	{ path: "/zykj/ztsy/notice", name: "中天书院 - 通知公告", type: "notice" },
+	// 文学与传媒学院
+	{ path: "/zykj/wcxy/news", name: "文学与传媒学院 - 学院新闻", type: "news" },
+	{ path: "/zykj/wcxy/notice", name: "文学与传媒学院 - 通知公告", type: "notice" },
+	// 外国语学院
+	{ path: "/zykj/wyxy/news", name: "外国语学院 - 学院新闻", type: "news" },
+	{ path: "/zykj/wyxy/notice", name: "外国语学院 - 通知公告", type: "notice" },
+	// 原初书院
+	{ path: "/zykj/ycsy/news", name: "原初书院 - 原初动态", type: "news" },
+	{ path: "/zykj/ycsy/notice", name: "原初书院 - 通知公告", type: "notice" },
+	// 教育学院
+	{ path: "/zykj/jyxy/news", name: "教育学院 - 学院动态", type: "news" },
+	{ path: "/zykj/jyxy/sfrz", name: "教育学院 - 师范认证", type: "news" },
+	{ path: "/zykj/jyxy/notice", name: "教育学院 - 通知公告", type: "notice" },
+	// 音乐舞蹈学院
+	{ path: "/zykj/yywdxy/news", name: "音乐舞蹈学院 - 原初动态", type: "news" },
+	{ path: "/zykj/yywdxy/notice", name: "音乐舞蹈学院 - 通知公告", type: "notice" },
+	// 艺术设计学院
+	{ path: "/zykj/yssjxy/news", name: "艺术设计学院 - 原初动态", type: "news" },
+	{ path: "/zykj/yssjxy/notice", name: "艺术设计学院 - 通知公告", type: "notice" },
+	// 公共艺术教育教学中心
+	{ path: "/zykj/ggys/news", name: "公共艺术教育教学中心 - 中心新闻", type: "news" },
+	{ path: "/zykj/ggys/notice", name: "公共艺术教育教学中心 - 通知公告", type: "notice" },
+	// 马克思主义学院
+	{ path: "/zykj/mkszyxy/news", name: "马克思主义学院 - 学院新闻", type: "news" },
+	{ path: "/zykj/mkszyxy/notice", name: "马克思主义学院 - 通知公告", type: "notice" },
+	// 公共体育教育教学中心
+	{ path: "/zykj/ggtyjyzx/news", name: "公共体育教育教学中心 - 新闻动态", type: "news" },
+	{ path: "/zykj/ggtyjyzx/notice", name: "公共体育教育教学中心 - 通知公告", type: "notice" },
+	// 党委组织（统战）部
+	{ path: "/zykj/dwzzb/gzdt", name: "党委组织（统战）部 - 工作动态", type: "news" },
+	{ path: "/zykj/dwzzb/dxgz", name: "党委组织（统战）部 - 党校工作", type: "news" },
+	{ path: "/zykj/dwzzb/tzgz", name: "党委组织（统战）部 - 统战工作", type: "news" },
+	{ path: "/zykj/dwzzb/notice", name: "党委组织（统战）部 - 通知公告", type: "notice" },
+	// 党委宣传部
+	{ path: "/zykj/xwzx/bmdt", name: "党委宣传部 - 部门动态", type: "news" },
+	{ path: "/zykj/xwzx/notice", name: "党委宣传部 - 通知公告", type: "notice" },
+	// 纪委办公室
+	{ path: "/zykj/jwbgs/jjyw", name: "纪委办公室 - 纪检要闻", type: "news" },
+	{ path: "/zykj/jwbgs/notice", name: "纪委办公室 - 通知公告", type: "notice" },
+	// 教师发展中心
+	{ path: "/zykj/jsfzzx/news", name: "教师发展中心 - 新闻动态", type: "news" },
+	{ path: "/zykj/jsfzzx/notice", name: "教师发展中心 - 通知公告", type: "notice" },
+	// 学生发展处
+	{ path: "/zykj/xgc/gzdt", name: "学生发展处 - 工作动态", type: "news" },
+	{ path: "/zykj/xgc/notice", name: "学生发展处 - 通知公告", type: "notice" },
+	// 后勤管理处
+	{ path: "/zykj/hqc/bmdt", name: "后勤管理处 - 部门动态", type: "news" },
+	{ path: "/zykj/hqc/notice", name: "后勤管理处 - 通知公告", type: "notice" },
+	{ path: "/zykj/hqc/hqgs", name: "后勤管理处 - 后勤公示", type: "notice" },
+	// 校工会
+	{ path: "/zykj/gh/bmdt", name: "校工会 - 部门动态", type: "news" },
+	{ path: "/zykj/gh/notice", name: "校工会 - 通知公告", type: "notice" },
+	// 校团委
+	{ path: "/zykj/tw/tqyx", name: "校团委 - 团情要迅", type: "news" },
+	{ path: "/zykj/tw/gzdt", name: "校团委 - 工作动态", type: "news" },
+	{ path: "/zykj/tw/stfc", name: "校团委 - 社团风采", type: "news" },
+	{ path: "/zykj/tw/xxsh", name: "校团委 - 校学生会", type: "news" },
+	{ path: "/zykj/tw/notice", name: "校团委 - 通知公告", type: "notice" },
+	// 校长办公室
+	{ path: "/zykj/dzb/bmdt", name: "校长办公室 - 部门动态", type: "news" },
+	{ path: "/zykj/dzb/notice", name: "校长办公室 - 通知公告", type: "notice" },
+	// 发展规划处
+	{ path: "/zykj/fzghc/news", name: "发展规划处 - 新闻动态", type: "news" },
+	{ path: "/zykj/fzghc/notice", name: "发展规划处 - 通知公告", type: "notice" },
+	// 教务处
+	{ path: "/zykj/jwc/bmdt", name: "教务处 - 部门动态", type: "news" },
+	{ path: "/zykj/jwc/sxjd", name: "教务处 - 实习基地", type: "news" },
+	{ path: "/zykj/jwc/sjjx", name: "教务处 - 实践教学", type: "news" },
+	{ path: "/zykj/jwc/sysaq", name: "教务处 - 实验室安全", type: "news" },
+	{ path: "/zykj/jwc/sjwj", name: "教务处 - 上级文件", type: "notice" },
+	{ path: "/zykj/jwc/xxwj", name: "教务处 - 学校文件", type: "notice" },
+	// 科技处
+	{ path: "/zykj/kjc/kydt", name: "科技处 - 科研动态", type: "news" },
+	{ path: "/zykj/kjc/xmsb", name: "科技处 - 项目申报", type: "notice" },
+	{ path: "/zykj/kjc/xmjx", name: "科技处 - 项目结项", type: "notice" },
+	{ path: "/zykj/kjc/cgsb", name: "科技处 - 成果申报", type: "notice" },
+	{ path: "/zykj/kjc/xkptsb", name: "科技处 - 学科、平台申报", type: "notice" },
+	{ path: "/zykj/kjc/xsjl", name: "科技处 - 学术交流", type: "notice" },
+	{ path: "/zykj/kjc/gsgg", name: "科技处 - 公示公告", type: "notice" },
+	// 招生信息网
+	{ path: "/zykj/zs/zszx", name: "招生信息网 - 招生资讯", type: "news" },
+	{ path: "/zykj/zs/notice", name: "招生信息网 - 通知公告", type: "notice" },
+	// 就业信息网
+	{ path: "/zykj/job/bmdt", name: "就业信息网 - 部门动态", type: "news" },
+	{ path: "/zykj/job/notice", name: "就业信息网 - 通知公告", type: "notice" },
+	// 校地合作处
+	{ path: "/zykj/oia/zxkx", name: "校地合作处 - 最新快讯", type: "news" },
+	{ path: "/zykj/oia/notice", name: "校地合作处 - 通知公告", type: "notice" },
+	// 国际合作与交流处
+	{ path: "/zykj/gjhzyjlc/news", name: "国际合作与交流处 - 新闻动态", type: "news" },
+	{ path: "/zykj/gjhzyjlc/notice", name: "国际合作与交流处 - 通知公告", type: "notice" },
+	// 人力资源处
+	{ path: "/zykj/hr/bmdt", name: "人力资源处 - 部门动态", type: "news" },
+	{ path: "/zykj/hr/notice", name: "人力资源处 - 通知公告", type: "notice" },
+	// 信息化建设与管理中心
+	{ path: "/zykj/nic/bmdt", name: "信息化建设与管理中心 - 部门动态", type: "news" },
+	{ path: "/zykj/nic/notice", name: "信息化建设与管理中心 - 通知公告", type: "notice" },
+	// 图书馆
+	{ path: "/zykj/tsg/news", name: "图书馆 - 新闻动态", type: "news" },
+	{ path: "/zykj/tsg/notice", name: "图书馆 - 通知公告", type: "notice" },
+	// 学报编辑部
+	{ path: "/zykj/xbbjb/xbdt", name: "学报编辑部 - 学报动态", type: "news" },
+	// 心理健康教育中心
+	{ path: "/zykj/xljkjyzx/gzdt", name: "心理健康教育中心 - 工作动态", type: "news" },
+	{ path: "/zykj/xljkjyzx/hdy", name: "心理健康教育中心 - 心理健康活动月", type: "news" },
+	{ path: "/zykj/xljkjyzx/notice", name: "心理健康教育中心 - 通知公告", type: "notice" },
+	// 校友会办公室
+	{ path: "/zykj/xyh/xydt", name: "校友会办公室 - 校友动态", type: "news" },
+];
+
+var container = document.getElementById("zykj-routes");
+zykjRoutes.forEach(function(r) {
+	var a = document.createElement("a");
+	a.className = "route-item";
+	a.href = "/rss" + r.path;
+	a.dataset.name = r.name.toLowerCase();
+	a.dataset.path = r.path.toLowerCase();
+	var left = document.createElement("span");
+	left.className = "route-name";
+	left.textContent = r.name;
+	var right = document.createElement("div");
+	right.style.display = "flex";
+	right.style.alignItems = "center";
+	right.style.gap = "0.5rem";
+	var tag = document.createElement("span");
+	tag.className = "route-tag " + (r.type === "news" ? "news" : "notice");
+	tag.textContent = r.type === "news" ? "新闻" : "公告";
+	var pathLabel = document.createElement("span");
+	pathLabel.className = "route-path";
+	pathLabel.textContent = r.path;
+	right.appendChild(tag);
+	right.appendChild(pathLabel);
+	a.appendChild(left);
+	a.appendChild(right);
+	container.appendChild(a);
+});
+
+function toggleSection(id) {
+	var el = document.getElementById(id);
+	el.classList.toggle("collapsed");
+}
+
+function filterRoutes() {
+	var q = document.getElementById("searchInput").value.toLowerCase().trim();
+	var items = document.querySelectorAll(".route-item");
+	items.forEach(function(item) {
+		var name = item.dataset.name || "";
+		var path = item.dataset.path || "";
+		var text = item.textContent.toLowerCase();
+		if (!q || name.indexOf(q) >= 0 || path.indexOf(q) >= 0 || text.indexOf(q) >= 0) {
+			item.classList.remove("hidden");
+		} else {
+			item.classList.add("hidden");
+		}
+	});
+	// Expand all sections when searching
+	if (q) {
+		document.querySelectorAll(".section").forEach(function(s) { s.classList.remove("collapsed"); });
+	}
+}
+</script>
+
+</body>
 </html>
