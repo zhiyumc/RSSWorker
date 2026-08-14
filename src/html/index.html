@@ -15,6 +15,25 @@
 			--accent-light: #eff6ff;
 			--tag-news: #10b981;
 			--tag-notice: #f59e0b;
+			--checkbox-bg: #e2e8f0;
+			--hover-bg: #f1f5f9;
+			--shadow: 0 1px 3px rgba(0,0,0,0.08);
+		}
+		@media (prefers-color-scheme: dark) {
+			:root {
+				--bg: #0f172a;
+				--card-bg: #1e293b;
+				--border: #334155;
+				--text: #e2e8f0;
+				--text-secondary: #94a3b8;
+				--accent: #60a5fa;
+				--accent-light: #1e3a5f;
+				--tag-news: #10b981;
+				--tag-notice: #f59e0b;
+				--checkbox-bg: #334155;
+				--hover-bg: #334155;
+				--shadow: 0 1px 3px rgba(0,0,0,0.3);
+			}
 		}
 		* { margin: 0; padding: 0; box-sizing: border-box; }
 		body {
@@ -22,11 +41,12 @@
 			background: var(--bg);
 			color: var(--text);
 			line-height: 1.6;
+			transition: background 0.2s, color 0.2s;
 		}
 		.header {
 			background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
 			color: white;
-			padding: 3rem 1rem;
+			padding: 2.5rem 1rem;
 			text-align: center;
 		}
 		.header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
@@ -38,16 +58,71 @@
 			border-radius: 1rem;
 			font-size: 0.85rem;
 		}
-		.container { max-width: 1000px; margin: 0 auto; padding: 1.5rem 1rem; }
+		.toolbar {
+			max-width: 1000px;
+			margin: 1rem auto;
+			padding: 0 1rem;
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+			flex-wrap: wrap;
+		}
+		.search-box {
+			flex: 1;
+			min-width: 200px;
+			position: relative;
+		}
+		.search-box input {
+			width: 100%;
+			padding: 0.6rem 1rem 0.6rem 2.25rem;
+			border: 1px solid var(--border);
+			border-radius: 0.5rem;
+			font-size: 0.95rem;
+			outline: none;
+			background: var(--card-bg);
+			color: var(--text);
+			transition: border-color 0.15s;
+		}
+		.search-box input:focus { border-color: var(--accent); }
+		.search-box::before {
+			content: "\1F50D";
+			position: absolute;
+			left: 0.6rem;
+			top: 50%;
+			transform: translateY(-50%);
+			font-size: 0.9rem;
+			opacity: 0.5;
+		}
+		.btn {
+			padding: 0.55rem 1rem;
+			border: 1px solid var(--border);
+			border-radius: 0.5rem;
+			font-size: 0.85rem;
+			cursor: pointer;
+			background: var(--card-bg);
+			color: var(--text);
+			transition: all 0.15s;
+			white-space: nowrap;
+		}
+		.btn:hover { border-color: var(--accent); background: var(--accent-light); }
+		.btn-primary {
+			background: var(--accent);
+			color: white;
+			border-color: var(--accent);
+		}
+		.btn-primary:hover { opacity: 0.9; }
+		.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+		.container { max-width: 1000px; margin: 0 auto; padding: 0 1rem 1.5rem; }
 		.section {
 			background: var(--card-bg);
 			border-radius: 0.75rem;
 			border: 1px solid var(--border);
 			margin-bottom: 1.5rem;
 			overflow: hidden;
+			box-shadow: var(--shadow);
 		}
 		.section-header {
-			padding: 1rem 1.25rem;
+			padding: 0.85rem 1.25rem;
 			border-bottom: 1px solid var(--border);
 			display: flex;
 			align-items: center;
@@ -56,7 +131,7 @@
 			user-select: none;
 			transition: background 0.15s;
 		}
-		.section-header:hover { background: var(--accent-light); }
+		.section-header:hover { background: var(--hover-bg); }
 		.section-header h2 { font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; }
 		.section-header .count {
 			background: var(--accent);
@@ -69,39 +144,73 @@
 		.section-header .arrow {
 			color: var(--text-secondary);
 			transition: transform 0.2s;
+			font-size: 0.7rem;
 		}
 		.section.collapsed .arrow { transform: rotate(-90deg); }
 		.section.collapsed .section-body { display: none; }
-		.section-body { padding: 0.5rem 0; }
+		.section-body { padding: 0.25rem 0; }
 		.route-item {
 			display: flex;
 			align-items: center;
-			justify-content: space-between;
 			padding: 0.5rem 1.25rem;
 			text-decoration: none;
 			color: var(--text);
 			transition: background 0.1s;
+			gap: 0.6rem;
 		}
-		.route-item:hover { background: var(--accent-light); }
-		.route-item .route-name { font-size: 0.95rem; }
-		.route-item .route-path {
-			font-family: "SF Mono", "Fira Code", monospace;
-			font-size: 0.82rem;
-			color: var(--accent);
-			background: var(--accent-light);
-			padding: 0.15rem 0.5rem;
-			border-radius: 0.35rem;
-			white-space: nowrap;
+		.route-item:hover { background: var(--hover-bg); }
+		.route-item .checkbox {
+			width: 18px;
+			height: 18px;
+			border: 2px solid var(--checkbox-bg);
+			border-radius: 4px;
+			cursor: pointer;
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: all 0.15s;
+			position: relative;
 		}
-		.route-item .route-tags { display: flex; gap: 0.35rem; margin-right: 0.75rem; }
+		.route-item .checkbox.checked {
+			background: var(--accent);
+			border-color: var(--accent);
+		}
+		.route-item .checkbox.checked::after {
+			content: "";
+			width: 5px;
+			height: 9px;
+			border: solid white;
+			border-width: 0 2px 2px 0;
+			transform: rotate(45deg);
+			margin-top: -2px;
+		}
+		.route-item .favicon {
+			width: 20px;
+			height: 20px;
+			border-radius: 4px;
+			flex-shrink: 0;
+			object-fit: contain;
+		}
+		.route-item .route-name { font-size: 0.92rem; flex: 1; }
+		.route-item .route-tags { display: flex; gap: 0.35rem; }
 		.route-tag {
 			font-size: 0.68rem;
 			padding: 0.1rem 0.4rem;
 			border-radius: 0.35rem;
 			font-weight: 600;
 		}
-		.route-tag.news { background: #d1fae5; color: #065f46; }
-		.route-tag.notice { background: #fef3c7; color: #92400e; }
+		.route-tag.news { background: rgba(16,185,129,0.15); color: var(--tag-news); }
+		.route-tag.notice { background: rgba(245,158,11,0.15); color: var(--tag-notice); }
+		.route-item .route-path {
+			font-family: "SF Mono", "Fira Code", monospace;
+			font-size: 0.8rem;
+			color: var(--accent);
+			background: var(--accent-light);
+			padding: 0.15rem 0.5rem;
+			border-radius: 0.35rem;
+			white-space: nowrap;
+		}
 		.footer {
 			text-align: center;
 			padding: 2rem 1rem;
@@ -109,26 +218,19 @@
 			font-size: 0.9rem;
 		}
 		.footer a { color: var(--accent); text-decoration: none; }
-		.search-box {
-			max-width: 500px;
-			margin: 1rem auto;
-			padding: 0 1rem;
-		}
-		.search-box input {
-			width: 100%;
-			padding: 0.6rem 1rem;
-			border: 1px solid var(--border);
-			border-radius: 0.5rem;
-			font-size: 0.95rem;
-			outline: none;
-			transition: border-color 0.15s;
-		}
-		.search-box input:focus { border-color: var(--accent); }
 		.hidden { display: none !important; }
+		.select-info {
+			font-size: 0.82rem;
+			color: var(--text-secondary);
+			margin-left: auto;
+		}
 		@media (max-width: 640px) {
 			.header h1 { font-size: 1.8rem; }
-			.route-item { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
-			.route-item .route-tags { margin-right: 0; margin-top: 0.25rem; }
+			.route-item { flex-wrap: wrap; }
+			.route-item .route-name { width: 100%; order: 1; }
+			.route-item .route-path { font-size: 0.72rem; }
+			.toolbar { flex-direction: column; align-items: stretch; }
+			.toolbar .search-box { width: 100%; }
 		}
 	</style>
 </head>
@@ -146,8 +248,14 @@
 	</div>
 </div>
 
-<div class="search-box">
-	<input type="text" id="searchInput" placeholder="搜索路由..." oninput="filterRoutes()" />
+<div class="toolbar">
+	<div class="search-box">
+		<input type="text" id="searchInput" placeholder="搜索路由..." oninput="filterRoutes()" />
+	</div>
+	<button class="btn" onclick="selectAllZykj()">全选中原科技学院</button>
+	<button class="btn" onclick="deselectAll()">取消全选</button>
+	<button class="btn btn-primary" id="exportBtn" onclick="exportOPML()" disabled>导出 OPML</button>
+	<span class="select-info" id="selectInfo">未选择</span>
 </div>
 
 <div class="container">
@@ -159,33 +267,43 @@
 			<span class="arrow">&#9660;</span>
 		</div>
 		<div class="section-body">
-			<a class="route-item" href="/rss/bilibili/user/dynamic/1">
+			<div class="route-item" data-name="bilibili 动态" data-path="/bilibili/user/dynamic/:uid">
+				<div class="checkbox" onclick="event.stopPropagation(); toggleCheckbox(this)" data-rss-url="/rss/bilibili/user/dynamic/1" data-title="bilibili 动态"></div>
+				<img class="favicon" src="https://www.bilibili.com/favicon.ico" alt="" />
 				<span class="route-name">bilibili 动态</span>
 				<span class="route-path">/bilibili/user/dynamic/:uid</span>
-			</a>
-			<a class="route-item" href="/rss/bilibili/user/video/1">
+			</div>
+			<div class="route-item" data-name="bilibili 视频" data-path="/bilibili/user/video/:uid">
+				<div class="checkbox" onclick="event.stopPropagation(); toggleCheckbox(this)" data-rss-url="/rss/bilibili/user/video/1" data-title="bilibili 视频"></div>
+				<img class="favicon" src="https://www.bilibili.com/favicon.ico" alt="" />
 				<span class="route-name">bilibili 视频</span>
 				<span class="route-path">/bilibili/user/video/:uid</span>
-			</a>
-			<a class="route-item" href="/rss/telegram/channel/telegram">
+			</div>
+			<div class="route-item" data-name="telegram 频道" data-path="/telegram/channel/:username">
+				<div class="checkbox" onclick="event.stopPropagation(); toggleCheckbox(this)" data-rss-url="/rss/telegram/channel/telegram" data-title="telegram 频道"></div>
+				<img class="favicon" src="https://telegram.org/img/t_logo.png" alt="" />
 				<span class="route-name">telegram 频道</span>
 				<span class="route-path">/telegram/channel/:username</span>
-			</a>
-			<a class="route-item" href="/rss/weibo/user/1">
+			</div>
+			<div class="route-item" data-name="weibo 用户" data-path="/weibo/user/:uid">
+				<div class="checkbox" onclick="event.stopPropagation(); toggleCheckbox(this)" data-rss-url="/rss/weibo/user/1" data-title="weibo 用户"></div>
+				<img class="favicon" src="https://weibo.com/favicon.ico" alt="" />
 				<span class="route-name">weibo 用户</span>
 				<span class="route-path">/weibo/user/:uid</span>
-			</a>
-			<a class="route-item" href="/rss/xiaohongshu/user/5d2aec020000000012037401">
+			</div>
+			<div class="route-item" data-name="小红书用户" data-path="/xiaohongshu/user/:uid">
+				<div class="checkbox" onclick="event.stopPropagation(); toggleCheckbox(this)" data-rss-url="/rss/xiaohongshu/user/5d2aec020000000012037401" data-title="小红书用户"></div>
+				<img class="favicon" src="https://www.xiaohongshu.com/favicon.ico" alt="" />
 				<span class="route-name">小红书用户</span>
 				<span class="route-path">/xiaohongshu/user/:uid</span>
-			</a>
+			</div>
 		</div>
 	</div>
 
 	<!-- 中原科技学院 -->
 	<div class="section" id="section-zykj">
 		<div class="section-header" onclick="toggleSection('section-zykj')">
-			<h2><img src="https://www.zykj.edu.cn/images/zhongyuankejixueyuanlogo6.png" alt="" style="width:28px;height:28px;vertical-align:middle;border-radius:4px;" /> 中原科技学院 <span class="count">101</span></h2>
+			<h2><img src="https://www.zykj.edu.cn/favicon.ico" alt="" style="width:28px;height:28px;vertical-align:middle;border-radius:4px;" /> 中原科技学院 <span class="count">101</span></h2>
 			<span class="arrow">&#9660;</span>
 		</div>
 		<div class="section-body" id="zykj-routes"></div>
@@ -199,152 +317,154 @@
 </div>
 
 <script>
+var ZYKJ_FAVICONS = {
+	"www.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"lxsy.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"jjxy.zykj.edu.cn": "https://jjxy.zykj.edu.cn/skin/sites/2023jgxb/d/images/favicon.ico",
+	"glxy.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"dysy.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"tjxy.zykj.edu.cn": "https://tjxy.zykj.edu.cn/skin/sites/2023lgxb/d/images/favicon.ico",
+	"jdxy.zykj.edu.cn": "https://jdxy.zykj.edu.cn/skin/sites/2023lgxb/d/images/favicon.ico",
+	"xxgcxy.zykj.edu.cn": "https://xxgcxy.zykj.edu.cn/skin/sites/2023lgxb/d/images/favicon.ico",
+	"dqydzgcxy.zykj.edu.cn": "https://dqydzgcxy.zykj.edu.cn/skin/sites/2023lgxb/d/images/favicon.ico",
+	"ztsy.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"wcxy.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"wyxy.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"ycsy.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"jyxy.zykj.edu.cn": "https://jyxy.zykj.edu.cn/images/favicon.ico",
+	"yywdxy.zykj.edu.cn": "https://yywdxy.zykj.edu.cn/images/favicon.ico",
+	"yssjxy.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"ggys.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"mkszyxy.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"ggtyjyzx.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"dwzzb.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"xwzx.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"jwbgs.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"jsfzzx.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"xgc.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"hqc.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"gh.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"tw.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"dzb.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"fzghc.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"jwc.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"kjc.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"zs.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"job.zykj.edu.cn": "https://img.goworkla.cn/college/5c2c5007c623471b949089fb/logo.png",
+	"oia.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"gjhzyjlc.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"hr.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"nic.zykj.edu.cn": "https://nic.zykj.edu.cn/images/favicon.png",
+	"tsg.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"xljkjyzx.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico",
+	"xyh.zykj.edu.cn": "https://www.zykj.edu.cn/favicon.ico"
+};
+
 var zykjRoutes = [
-	// 学校新闻资讯
-	{ path: "/zykj/school/xxyw", name: "学校要闻", type: "news" },
-	{ path: "/zykj/school/kyjj", name: "科研聚焦", type: "news" },
-	{ path: "/zykj/school/jxdt", name: "教学动态", type: "news" },
-	{ path: "/zykj/school/jcfc", name: "基层风采", type: "news" },
-	{ path: "/zykj/school/mtgz", name: "媒体关注", type: "news" },
-	// 学校通知公告
-	{ path: "/zykj/school/tzgg", name: "通知公告", type: "notice" },
-	// 立心书院
-	{ path: "/zykj/lxsy/news", name: "立心书院 - 立心动态", type: "news" },
-	{ path: "/zykj/lxsy/notice", name: "立心书院 - 通知公告", type: "notice" },
-	// 经济学院
-	{ path: "/zykj/jjxy/news", name: "经济学院 - 学院动态", type: "news" },
-	{ path: "/zykj/jjxy/notice", name: "经济学院 - 通知公告", type: "notice" },
-	// 管理学院
-	{ path: "/zykj/glxy/news", name: "管理学院 - 学院动态", type: "news" },
-	{ path: "/zykj/glxy/notice", name: "管理学院 - 通知公告", type: "notice" },
-	// 鼎元书院
-	{ path: "/zykj/dysy/news", name: "鼎元书院 - 鼎元动态", type: "news" },
-	{ path: "/zykj/dysy/notice", name: "鼎元书院 - 通知公告", type: "notice" },
-	// 土木工程学院
-	{ path: "/zykj/tjxy/news", name: "土木工程学院 - 学院新闻", type: "news" },
-	{ path: "/zykj/tjxy/notice", name: "土木工程学院 - 通知公告", type: "notice" },
-	// 机电工程学院
-	{ path: "/zykj/jdxy/news", name: "机电工程学院 - 学院动态", type: "news" },
-	{ path: "/zykj/jdxy/notice", name: "机电工程学院 - 通知公告", type: "notice" },
-	// 信息工程学院
-	{ path: "/zykj/xxgcxy/news", name: "信息工程学院 - 学院动态", type: "news" },
-	{ path: "/zykj/xxgcxy/notice", name: "信息工程学院 - 通知公告", type: "notice" },
-	// 电气与电子工程学院
-	{ path: "/zykj/dqydzgcxy/news", name: "电气与电子工程学院 - 学院动态", type: "news" },
-	{ path: "/zykj/dqydzgcxy/notice", name: "电气与电子工程学院 - 通知公告", type: "notice" },
-	// 中天书院
-	{ path: "/zykj/ztsy/news", name: "中天书院 - 中天动态", type: "news" },
-	{ path: "/zykj/ztsy/notice", name: "中天书院 - 通知公告", type: "notice" },
-	// 文学与传媒学院
-	{ path: "/zykj/wcxy/news", name: "文学与传媒学院 - 学院新闻", type: "news" },
-	{ path: "/zykj/wcxy/notice", name: "文学与传媒学院 - 通知公告", type: "notice" },
-	// 外国语学院
-	{ path: "/zykj/wyxy/news", name: "外国语学院 - 学院新闻", type: "news" },
-	{ path: "/zykj/wyxy/notice", name: "外国语学院 - 通知公告", type: "notice" },
-	// 原初书院
-	{ path: "/zykj/ycsy/news", name: "原初书院 - 原初动态", type: "news" },
-	{ path: "/zykj/ycsy/notice", name: "原初书院 - 通知公告", type: "notice" },
-	// 教育学院
-	{ path: "/zykj/jyxy/news", name: "教育学院 - 学院动态", type: "news" },
-	{ path: "/zykj/jyxy/sfrz", name: "教育学院 - 师范认证", type: "news" },
-	{ path: "/zykj/jyxy/notice", name: "教育学院 - 通知公告", type: "notice" },
-	// 音乐舞蹈学院
-	{ path: "/zykj/yywdxy/news", name: "音乐舞蹈学院 - 原初动态", type: "news" },
-	{ path: "/zykj/yywdxy/notice", name: "音乐舞蹈学院 - 通知公告", type: "notice" },
-	// 艺术设计学院
-	{ path: "/zykj/yssjxy/news", name: "艺术设计学院 - 原初动态", type: "news" },
-	{ path: "/zykj/yssjxy/notice", name: "艺术设计学院 - 通知公告", type: "notice" },
-	// 公共艺术教育教学中心
-	{ path: "/zykj/ggys/news", name: "公共艺术教育教学中心 - 中心新闻", type: "news" },
-	{ path: "/zykj/ggys/notice", name: "公共艺术教育教学中心 - 通知公告", type: "notice" },
-	// 马克思主义学院
-	{ path: "/zykj/mkszyxy/news", name: "马克思主义学院 - 学院新闻", type: "news" },
-	{ path: "/zykj/mkszyxy/notice", name: "马克思主义学院 - 通知公告", type: "notice" },
-	// 公共体育教育教学中心
-	{ path: "/zykj/ggtyjyzx/news", name: "公共体育教育教学中心 - 新闻动态", type: "news" },
-	{ path: "/zykj/ggtyjyzx/notice", name: "公共体育教育教学中心 - 通知公告", type: "notice" },
-	// 党委组织（统战）部
-	{ path: "/zykj/dwzzb/gzdt", name: "党委组织（统战）部 - 工作动态", type: "news" },
-	{ path: "/zykj/dwzzb/dxgz", name: "党委组织（统战）部 - 党校工作", type: "news" },
-	{ path: "/zykj/dwzzb/tzgz", name: "党委组织（统战）部 - 统战工作", type: "news" },
-	{ path: "/zykj/dwzzb/notice", name: "党委组织（统战）部 - 通知公告", type: "notice" },
-	// 党委宣传部
-	{ path: "/zykj/xwzx/bmdt", name: "党委宣传部 - 部门动态", type: "news" },
-	{ path: "/zykj/xwzx/notice", name: "党委宣传部 - 通知公告", type: "notice" },
-	// 纪委办公室
-	{ path: "/zykj/jwbgs/jjyw", name: "纪委办公室 - 纪检要闻", type: "news" },
-	{ path: "/zykj/jwbgs/notice", name: "纪委办公室 - 通知公告", type: "notice" },
-	// 教师发展中心
-	{ path: "/zykj/jsfzzx/news", name: "教师发展中心 - 新闻动态", type: "news" },
-	{ path: "/zykj/jsfzzx/notice", name: "教师发展中心 - 通知公告", type: "notice" },
-	// 学生发展处
-	{ path: "/zykj/xgc/gzdt", name: "学生发展处 - 工作动态", type: "news" },
-	{ path: "/zykj/xgc/notice", name: "学生发展处 - 通知公告", type: "notice" },
-	// 后勤管理处
-	{ path: "/zykj/hqc/bmdt", name: "后勤管理处 - 部门动态", type: "news" },
-	{ path: "/zykj/hqc/notice", name: "后勤管理处 - 通知公告", type: "notice" },
-	{ path: "/zykj/hqc/hqgs", name: "后勤管理处 - 后勤公示", type: "notice" },
-	// 校工会
-	{ path: "/zykj/gh/bmdt", name: "校工会 - 部门动态", type: "news" },
-	{ path: "/zykj/gh/notice", name: "校工会 - 通知公告", type: "notice" },
-	// 校团委
-	{ path: "/zykj/tw/tqyx", name: "校团委 - 团情要迅", type: "news" },
-	{ path: "/zykj/tw/gzdt", name: "校团委 - 工作动态", type: "news" },
-	{ path: "/zykj/tw/stfc", name: "校团委 - 社团风采", type: "news" },
-	{ path: "/zykj/tw/xxsh", name: "校团委 - 校学生会", type: "news" },
-	{ path: "/zykj/tw/notice", name: "校团委 - 通知公告", type: "notice" },
-	// 校长办公室
-	{ path: "/zykj/dzb/bmdt", name: "校长办公室 - 部门动态", type: "news" },
-	{ path: "/zykj/dzb/notice", name: "校长办公室 - 通知公告", type: "notice" },
-	// 发展规划处
-	{ path: "/zykj/fzghc/news", name: "发展规划处 - 新闻动态", type: "news" },
-	{ path: "/zykj/fzghc/notice", name: "发展规划处 - 通知公告", type: "notice" },
-	// 教务处
-	{ path: "/zykj/jwc/bmdt", name: "教务处 - 部门动态", type: "news" },
-	{ path: "/zykj/jwc/sxjd", name: "教务处 - 实习基地", type: "news" },
-	{ path: "/zykj/jwc/sjjx", name: "教务处 - 实践教学", type: "news" },
-	{ path: "/zykj/jwc/sysaq", name: "教务处 - 实验室安全", type: "news" },
-	{ path: "/zykj/jwc/sjwj", name: "教务处 - 上级文件", type: "notice" },
-	{ path: "/zykj/jwc/xxwj", name: "教务处 - 学校文件", type: "notice" },
-	// 科技处
-	{ path: "/zykj/kjc/kydt", name: "科技处 - 科研动态", type: "news" },
-	{ path: "/zykj/kjc/xmsb", name: "科技处 - 项目申报", type: "notice" },
-	{ path: "/zykj/kjc/xmjx", name: "科技处 - 项目结项", type: "notice" },
-	{ path: "/zykj/kjc/cgsb", name: "科技处 - 成果申报", type: "notice" },
-	{ path: "/zykj/kjc/xkptsb", name: "科技处 - 学科、平台申报", type: "notice" },
-	{ path: "/zykj/kjc/xsjl", name: "科技处 - 学术交流", type: "notice" },
-	{ path: "/zykj/kjc/gsgg", name: "科技处 - 公示公告", type: "notice" },
-	// 招生信息网
-	{ path: "/zykj/zs/zszx", name: "招生信息网 - 招生资讯", type: "news" },
-	{ path: "/zykj/zs/notice", name: "招生信息网 - 通知公告", type: "notice" },
-	// 就业信息网
-	{ path: "/zykj/job/bmdt", name: "就业信息网 - 部门动态", type: "news" },
-	{ path: "/zykj/job/notice", name: "就业信息网 - 通知公告", type: "notice" },
-	// 校地合作处
-	{ path: "/zykj/oia/zxkx", name: "校地合作处 - 最新快讯", type: "news" },
-	{ path: "/zykj/oia/notice", name: "校地合作处 - 通知公告", type: "notice" },
-	// 国际合作与交流处
-	{ path: "/zykj/gjhzyjlc/news", name: "国际合作与交流处 - 新闻动态", type: "news" },
-	{ path: "/zykj/gjhzyjlc/notice", name: "国际合作与交流处 - 通知公告", type: "notice" },
-	// 人力资源处
-	{ path: "/zykj/hr/bmdt", name: "人力资源处 - 部门动态", type: "news" },
-	{ path: "/zykj/hr/notice", name: "人力资源处 - 通知公告", type: "notice" },
-	// 信息化建设与管理中心
-	{ path: "/zykj/nic/bmdt", name: "信息化建设与管理中心 - 部门动态", type: "news" },
-	{ path: "/zykj/nic/notice", name: "信息化建设与管理中心 - 通知公告", type: "notice" },
-	// 图书馆
-	{ path: "/zykj/tsg/news", name: "图书馆 - 新闻动态", type: "news" },
-	{ path: "/zykj/tsg/notice", name: "图书馆 - 通知公告", type: "notice" },
-	// 学报编辑部
-	{ path: "/zykj/xbbjb/xbdt", name: "学报编辑部 - 学报动态", type: "news" },
-	// 心理健康教育中心
-	{ path: "/zykj/xljkjyzx/gzdt", name: "心理健康教育中心 - 工作动态", type: "news" },
-	{ path: "/zykj/xljkjyzx/hdy", name: "心理健康教育中心 - 心理健康活动月", type: "news" },
-	{ path: "/zykj/xljkjyzx/notice", name: "心理健康教育中心 - 通知公告", type: "notice" },
-	// 校友会办公室
-	{ path: "/zykj/xyh/xydt", name: "校友会办公室 - 校友动态", type: "news" },
+	{ path: "/zykj/school/xxyw", name: "学校要闻", type: "news", domain: "www.zykj.edu.cn" },
+	{ path: "/zykj/school/kyjj", name: "科研聚焦", type: "news", domain: "www.zykj.edu.cn" },
+	{ path: "/zykj/school/jxdt", name: "教学动态", type: "news", domain: "www.zykj.edu.cn" },
+	{ path: "/zykj/school/jcfc", name: "基层风采", type: "news", domain: "www.zykj.edu.cn" },
+	{ path: "/zykj/school/mtgz", name: "媒体关注", type: "news", domain: "www.zykj.edu.cn" },
+	{ path: "/zykj/school/tzgg", name: "通知公告", type: "notice", domain: "www.zykj.edu.cn" },
+	{ path: "/zykj/lxsy/news", name: "立心书院 - 立心动态", type: "news", domain: "lxsy.zykj.edu.cn" },
+	{ path: "/zykj/lxsy/notice", name: "立心书院 - 通知公告", type: "notice", domain: "lxsy.zykj.edu.cn" },
+	{ path: "/zykj/jjxy/news", name: "经济学院 - 学院动态", type: "news", domain: "jjxy.zykj.edu.cn" },
+	{ path: "/zykj/jjxy/notice", name: "经济学院 - 通知公告", type: "notice", domain: "jjxy.zykj.edu.cn" },
+	{ path: "/zykj/glxy/news", name: "管理学院 - 学院动态", type: "news", domain: "glxy.zykj.edu.cn" },
+	{ path: "/zykj/glxy/notice", name: "管理学院 - 通知公告", type: "notice", domain: "glxy.zykj.edu.cn" },
+	{ path: "/zykj/dysy/news", name: "鼎元书院 - 鼎元动态", type: "news", domain: "dysy.zykj.edu.cn" },
+	{ path: "/zykj/dysy/notice", name: "鼎元书院 - 通知公告", type: "notice", domain: "dysy.zykj.edu.cn" },
+	{ path: "/zykj/tjxy/news", name: "土木工程学院 - 学院新闻", type: "news", domain: "tjxy.zykj.edu.cn" },
+	{ path: "/zykj/tjxy/notice", name: "土木工程学院 - 通知公告", type: "notice", domain: "tjxy.zykj.edu.cn" },
+	{ path: "/zykj/jdxy/news", name: "机电工程学院 - 学院动态", type: "news", domain: "jdxy.zykj.edu.cn" },
+	{ path: "/zykj/jdxy/notice", name: "机电工程学院 - 通知公告", type: "notice", domain: "jdxy.zykj.edu.cn" },
+	{ path: "/zykj/xxgcxy/news", name: "信息工程学院 - 学院动态", type: "news", domain: "xxgcxy.zykj.edu.cn" },
+	{ path: "/zykj/xxgcxy/notice", name: "信息工程学院 - 通知公告", type: "notice", domain: "xxgcxy.zykj.edu.cn" },
+	{ path: "/zykj/dqydzgcxy/news", name: "电气与电子工程学院 - 学院动态", type: "news", domain: "dqydzgcxy.zykj.edu.cn" },
+	{ path: "/zykj/dqydzgcxy/notice", name: "电气与电子工程学院 - 通知公告", type: "notice", domain: "dqydzgcxy.zykj.edu.cn" },
+	{ path: "/zykj/ztsy/news", name: "中天书院 - 中天动态", type: "news", domain: "ztsy.zykj.edu.cn" },
+	{ path: "/zykj/ztsy/notice", name: "中天书院 - 通知公告", type: "notice", domain: "ztsy.zykj.edu.cn" },
+	{ path: "/zykj/wcxy/news", name: "文学与传媒学院 - 学院新闻", type: "news", domain: "wcxy.zykj.edu.cn" },
+	{ path: "/zykj/wcxy/notice", name: "文学与传媒学院 - 通知公告", type: "notice", domain: "wcxy.zykj.edu.cn" },
+	{ path: "/zykj/wyxy/news", name: "外国语学院 - 学院新闻", type: "news", domain: "wyxy.zykj.edu.cn" },
+	{ path: "/zykj/wyxy/notice", name: "外国语学院 - 通知公告", type: "notice", domain: "wyxy.zykj.edu.cn" },
+	{ path: "/zykj/ycsy/news", name: "原初书院 - 原初动态", type: "news", domain: "ycsy.zykj.edu.cn" },
+	{ path: "/zykj/ycsy/notice", name: "原初书院 - 通知公告", type: "notice", domain: "ycsy.zykj.edu.cn" },
+	{ path: "/zykj/jyxy/news", name: "教育学院 - 学院动态", type: "news", domain: "jyxy.zykj.edu.cn" },
+	{ path: "/zykj/jyxy/sfrz", name: "教育学院 - 师范认证", type: "news", domain: "jyxy.zykj.edu.cn" },
+	{ path: "/zykj/jyxy/notice", name: "教育学院 - 通知公告", type: "notice", domain: "jyxy.zykj.edu.cn" },
+	{ path: "/zykj/yywdxy/news", name: "音乐舞蹈学院 - 原初动态", type: "news", domain: "yywdxy.zykj.edu.cn" },
+	{ path: "/zykj/yywdxy/notice", name: "音乐舞蹈学院 - 通知公告", type: "notice", domain: "yywdxy.zykj.edu.cn" },
+	{ path: "/zykj/yssjxy/news", name: "艺术设计学院 - 原初动态", type: "news", domain: "yssjxy.zykj.edu.cn" },
+	{ path: "/zykj/yssjxy/notice", name: "艺术设计学院 - 通知公告", type: "notice", domain: "yssjxy.zykj.edu.cn" },
+	{ path: "/zykj/ggys/news", name: "公共艺术教育教学中心 - 中心新闻", type: "news", domain: "ggys.zykj.edu.cn" },
+	{ path: "/zykj/ggys/notice", name: "公共艺术教育教学中心 - 通知公告", type: "notice", domain: "ggys.zykj.edu.cn" },
+	{ path: "/zykj/mkszyxy/news", name: "马克思主义学院 - 学院新闻", type: "news", domain: "mkszyxy.zykj.edu.cn" },
+	{ path: "/zykj/mkszyxy/notice", name: "马克思主义学院 - 通知公告", type: "notice", domain: "mkszyxy.zykj.edu.cn" },
+	{ path: "/zykj/ggtyjyzx/news", name: "公共体育教育教学中心 - 新闻动态", type: "news", domain: "ggtyjyzx.zykj.edu.cn" },
+	{ path: "/zykj/ggtyjyzx/notice", name: "公共体育教育教学中心 - 通知公告", type: "notice", domain: "ggtyjyzx.zykj.edu.cn" },
+	{ path: "/zykj/dwzzb/gzdt", name: "党委组织（统战）部 - 工作动态", type: "news", domain: "dwzzb.zykj.edu.cn" },
+	{ path: "/zykj/dwzzb/dxgz", name: "党委组织（统战）部 - 党校工作", type: "news", domain: "dwzzb.zykj.edu.cn" },
+	{ path: "/zykj/dwzzb/tzgz", name: "党委组织（统战）部 - 统战工作", type: "news", domain: "dwzzb.zykj.edu.cn" },
+	{ path: "/zykj/dwzzb/notice", name: "党委组织（统战）部 - 通知公告", type: "notice", domain: "dwzzb.zykj.edu.cn" },
+	{ path: "/zykj/xwzx/bmdt", name: "党委宣传部 - 部门动态", type: "news", domain: "xwzx.zykj.edu.cn" },
+	{ path: "/zykj/xwzx/notice", name: "党委宣传部 - 通知公告", type: "notice", domain: "xwzx.zykj.edu.cn" },
+	{ path: "/zykj/jwbgs/jjyw", name: "纪委办公室 - 纪检要闻", type: "news", domain: "jwbgs.zykj.edu.cn" },
+	{ path: "/zykj/jwbgs/notice", name: "纪委办公室 - 通知公告", type: "notice", domain: "jwbgs.zykj.edu.cn" },
+	{ path: "/zykj/jsfzzx/news", name: "教师发展中心 - 新闻动态", type: "news", domain: "jsfzzx.zykj.edu.cn" },
+	{ path: "/zykj/jsfzzx/notice", name: "教师发展中心 - 通知公告", type: "notice", domain: "jsfzzx.zykj.edu.cn" },
+	{ path: "/zykj/xgc/gzdt", name: "学生发展处 - 工作动态", type: "news", domain: "xgc.zykj.edu.cn" },
+	{ path: "/zykj/xgc/notice", name: "学生发展处 - 通知公告", type: "notice", domain: "xgc.zykj.edu.cn" },
+	{ path: "/zykj/hqc/bmdt", name: "后勤管理处 - 部门动态", type: "news", domain: "hqc.zykj.edu.cn" },
+	{ path: "/zykj/hqc/notice", name: "后勤管理处 - 通知公告", type: "notice", domain: "hqc.zykj.edu.cn" },
+	{ path: "/zykj/hqc/hqgs", name: "后勤管理处 - 后勤公示", type: "notice", domain: "hqc.zykj.edu.cn" },
+	{ path: "/zykj/gh/bmdt", name: "校工会 - 部门动态", type: "news", domain: "gh.zykj.edu.cn" },
+	{ path: "/zykj/gh/notice", name: "校工会 - 通知公告", type: "notice", domain: "gh.zykj.edu.cn" },
+	{ path: "/zykj/tw/tqyx", name: "校团委 - 团情要迅", type: "news", domain: "tw.zykj.edu.cn" },
+	{ path: "/zykj/tw/gzdt", name: "校团委 - 工作动态", type: "news", domain: "tw.zykj.edu.cn" },
+	{ path: "/zykj/tw/stfc", name: "校团委 - 社团风采", type: "news", domain: "tw.zykj.edu.cn" },
+	{ path: "/zykj/tw/xxsh", name: "校团委 - 校学生会", type: "news", domain: "tw.zykj.edu.cn" },
+	{ path: "/zykj/tw/notice", name: "校团委 - 通知公告", type: "notice", domain: "tw.zykj.edu.cn" },
+	{ path: "/zykj/dzb/bmdt", name: "校长办公室 - 部门动态", type: "news", domain: "dzb.zykj.edu.cn" },
+	{ path: "/zykj/dzb/notice", name: "校长办公室 - 通知公告", type: "notice", domain: "dzb.zykj.edu.cn" },
+	{ path: "/zykj/fzghc/news", name: "发展规划处 - 新闻动态", type: "news", domain: "fzghc.zykj.edu.cn" },
+	{ path: "/zykj/fzghc/notice", name: "发展规划处 - 通知公告", type: "notice", domain: "fzghc.zykj.edu.cn" },
+	{ path: "/zykj/jwc/bmdt", name: "教务处 - 部门动态", type: "news", domain: "jwc.zykj.edu.cn" },
+	{ path: "/zykj/jwc/sxjd", name: "教务处 - 实习基地", type: "news", domain: "jwc.zykj.edu.cn" },
+	{ path: "/zykj/jwc/sjjx", name: "教务处 - 实践教学", type: "news", domain: "jwc.zykj.edu.cn" },
+	{ path: "/zykj/jwc/sysaq", name: "教务处 - 实验室安全", type: "news", domain: "jwc.zykj.edu.cn" },
+	{ path: "/zykj/jwc/sjwj", name: "教务处 - 上级文件", type: "notice", domain: "jwc.zykj.edu.cn" },
+	{ path: "/zykj/jwc/xxwj", name: "教务处 - 学校文件", type: "notice", domain: "jwc.zykj.edu.cn" },
+	{ path: "/zykj/kjc/kydt", name: "科技处 - 科研动态", type: "news", domain: "kjc.zykj.edu.cn" },
+	{ path: "/zykj/kjc/xmsb", name: "科技处 - 项目申报", type: "notice", domain: "kjc.zykj.edu.cn" },
+	{ path: "/zykj/kjc/xmjx", name: "科技处 - 项目结项", type: "notice", domain: "kjc.zykj.edu.cn" },
+	{ path: "/zykj/kjc/cgsb", name: "科技处 - 成果申报", type: "notice", domain: "kjc.zykj.edu.cn" },
+	{ path: "/zykj/kjc/xkptsb", name: "科技处 - 学科、平台申报", type: "notice", domain: "kjc.zykj.edu.cn" },
+	{ path: "/zykj/kjc/xsjl", name: "科技处 - 学术交流", type: "notice", domain: "kjc.zykj.edu.cn" },
+	{ path: "/zykj/kjc/gsgg", name: "科技处 - 公示公告", type: "notice", domain: "kjc.zykj.edu.cn" },
+	{ path: "/zykj/zs/zszx", name: "招生信息网 - 招生资讯", type: "news", domain: "zs.zykj.edu.cn" },
+	{ path: "/zykj/zs/notice", name: "招生信息网 - 通知公告", type: "notice", domain: "zs.zykj.edu.cn" },
+	{ path: "/zykj/job/bmdt", name: "就业信息网 - 部门动态", type: "news", domain: "job.zykj.edu.cn" },
+	{ path: "/zykj/job/notice", name: "就业信息网 - 通知公告", type: "notice", domain: "job.zykj.edu.cn" },
+	{ path: "/zykj/oia/zxkx", name: "校地合作处 - 最新快讯", type: "news", domain: "oia.zykj.edu.cn" },
+	{ path: "/zykj/oia/notice", name: "校地合作处 - 通知公告", type: "notice", domain: "oia.zykj.edu.cn" },
+	{ path: "/zykj/gjhzyjlc/news", name: "国际合作与交流处 - 新闻动态", type: "news", domain: "gjhzyjlc.zykj.edu.cn" },
+	{ path: "/zykj/gjhzyjlc/notice", name: "国际合作与交流处 - 通知公告", type: "notice", domain: "gjhzyjlc.zykj.edu.cn" },
+	{ path: "/zykj/hr/bmdt", name: "人力资源处 - 部门动态", type: "news", domain: "hr.zykj.edu.cn" },
+	{ path: "/zykj/hr/notice", name: "人力资源处 - 通知公告", type: "notice", domain: "hr.zykj.edu.cn" },
+	{ path: "/zykj/nic/bmdt", name: "信息化建设与管理中心 - 部门动态", type: "news", domain: "nic.zykj.edu.cn" },
+	{ path: "/zykj/nic/notice", name: "信息化建设与管理中心 - 通知公告", type: "notice", domain: "nic.zykj.edu.cn" },
+	{ path: "/zykj/tsg/news", name: "图书馆 - 新闻动态", type: "news", domain: "tsg.zykj.edu.cn" },
+	{ path: "/zykj/tsg/notice", name: "图书馆 - 通知公告", type: "notice", domain: "tsg.zykj.edu.cn" },
+	{ path: "/zykj/xbbjb/xbdt", name: "学报编辑部 - 学报动态", type: "news", domain: "www.zykj.edu.cn" },
+	{ path: "/zykj/xljkjyzx/gzdt", name: "心理健康教育中心 - 工作动态", type: "news", domain: "xljkjyzx.zykj.edu.cn" },
+	{ path: "/zykj/xljkjyzx/hdy", name: "心理健康教育中心 - 心理健康活动月", type: "news", domain: "xljkjyzx.zykj.edu.cn" },
+	{ path: "/zykj/xljkjyzx/notice", name: "心理健康教育中心 - 通知公告", type: "notice", domain: "xljkjyzx.zykj.edu.cn" },
+	{ path: "/zykj/xyh/xydt", name: "校友会办公室 - 校友动态", type: "news", domain: "xyh.zykj.edu.cn" },
 ];
 
+// Render ZYKJ routes
 var container = document.getElementById("zykj-routes");
 zykjRoutes.forEach(function(r) {
 	var a = document.createElement("a");
@@ -352,9 +472,33 @@ zykjRoutes.forEach(function(r) {
 	a.href = "/rss" + r.path;
 	a.dataset.name = r.name.toLowerCase();
 	a.dataset.path = r.path.toLowerCase();
-	var left = document.createElement("span");
-	left.className = "route-name";
-	left.textContent = r.name;
+	a.dataset.domain = r.domain;
+
+	// Checkbox
+	var cb = document.createElement("div");
+	cb.className = "checkbox";
+	cb.onclick = function(e) { e.stopPropagation(); e.preventDefault(); toggleCheckbox(cb); };
+	cb.dataset.rssUrl = "/rss" + r.path;
+	cb.dataset.title = r.name;
+	cb.dataset.domain = r.domain;
+	a.appendChild(cb);
+
+	// Favicon
+	var fav = ZYKJ_FAVICONS[r.domain] || ZYKJ_FAVICONS["www.zykj.edu.cn"];
+	var img = document.createElement("img");
+	img.className = "favicon";
+	img.src = fav;
+	img.alt = "";
+	img.onerror = function() { this.src = "https://www.zykj.edu.cn/favicon.ico"; };
+	a.appendChild(img);
+
+	// Name
+	var name = document.createElement("span");
+	name.className = "route-name";
+	name.textContent = r.name;
+	a.appendChild(name);
+
+	// Tags + path
 	var right = document.createElement("div");
 	right.style.display = "flex";
 	right.style.alignItems = "center";
@@ -367,33 +511,107 @@ zykjRoutes.forEach(function(r) {
 	pathLabel.textContent = r.path;
 	right.appendChild(tag);
 	right.appendChild(pathLabel);
-	a.appendChild(left);
 	a.appendChild(right);
+
 	container.appendChild(a);
 });
 
+// --- Section toggle ---
 function toggleSection(id) {
 	var el = document.getElementById(id);
 	el.classList.toggle("collapsed");
 }
 
+// --- Search ---
 function filterRoutes() {
 	var q = document.getElementById("searchInput").value.toLowerCase().trim();
 	var items = document.querySelectorAll(".route-item");
 	items.forEach(function(item) {
-		var name = item.dataset.name || "";
-		var path = item.dataset.path || "";
-		var text = item.textContent.toLowerCase();
-		if (!q || name.indexOf(q) >= 0 || path.indexOf(q) >= 0 || text.indexOf(q) >= 0) {
+		var text = (item.dataset.name || "") + " " + (item.dataset.path || "") + " " + item.textContent.toLowerCase();
+		if (!q || text.indexOf(q) >= 0) {
 			item.classList.remove("hidden");
 		} else {
 			item.classList.add("hidden");
 		}
 	});
-	// Expand all sections when searching
 	if (q) {
 		document.querySelectorAll(".section").forEach(function(s) { s.classList.remove("collapsed"); });
 	}
+}
+
+// --- Checkbox logic ---
+function toggleCheckbox(el) {
+	el.classList.toggle("checked");
+	updateExportButton();
+}
+
+function getSelectedCheckboxes() {
+	return document.querySelectorAll(".checkbox.checked");
+}
+
+function updateExportButton() {
+	var count = getSelectedCheckboxes().length;
+	var btn = document.getElementById("exportBtn");
+	var info = document.getElementById("selectInfo");
+	btn.disabled = count === 0;
+	info.textContent = count === 0 ? "未选择" : "已选 " + count + " 个";
+}
+
+function selectAllZykj() {
+	document.querySelectorAll("#zykj-routes .checkbox").forEach(function(cb) {
+		cb.classList.add("checked");
+	});
+	updateExportButton();
+}
+
+function deselectAll() {
+	document.querySelectorAll(".checkbox.checked").forEach(function(cb) {
+		cb.classList.remove("checked");
+	});
+	updateExportButton();
+}
+
+// --- OPML export ---
+function exportOPML() {
+	var selected = getSelectedCheckboxes();
+	if (selected.length === 0) return;
+
+	var baseUrl = window.location.origin;
+	var xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+	xml += '<opml version="2.0">\n';
+	xml += '  <head>\n';
+	xml += '    <title>RSSWorker 订阅导出</title>\n';
+	xml += '  </head>\n';
+	xml += '  <body>\n';
+	xml += '    <outline title="RSSWorker" text="RSSWorker">\n';
+
+	selected.forEach(function(cb) {
+		var title = cb.dataset.title || "Untitled";
+		var rssUrl = cb.dataset.rssUrl || "";
+		var fullUrl = baseUrl + rssUrl;
+		var domain = cb.dataset.domain || "";
+		var fav = ZYKJ_FAVICONS[domain] || "https://www.zykj.edu.cn/favicon.ico";
+		var type = "rss";
+		xml += '      <outline type="' + type + '" text="' + escapeXml(title) + '" title="' + escapeXml(title) + '" xmlUrl="' + escapeXml(fullUrl) + '" htmlUrl="' + escapeXml(fullUrl) + '" />\n';
+	});
+
+	xml += '    </outline>\n';
+	xml += '  </body>\n';
+	xml += '</opml>\n';
+
+	var blob = new Blob([xml], { type: "text/xml;charset=utf-8" });
+	var url = URL.createObjectURL(blob);
+	var a = document.createElement("a");
+	a.href = url;
+	a.download = "rssworker.opml";
+	document.body.appendChild(a);
+	a.click();
+	document.body.removeChild(a);
+	URL.revokeObjectURL(url);
+}
+
+function escapeXml(str) {
+	return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 }
 </script>
 

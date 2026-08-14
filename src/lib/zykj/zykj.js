@@ -1,6 +1,57 @@
 import { renderRss2 } from '../../utils/util';
 
-const ICON = 'https://www.zykj.edu.cn/images/zhongyuankejixueyuanlogo6.png';
+// Favicon mapping per subdomain (browser tab icon)
+const FAVICON_MAP = {
+    'www.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'lxsy.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'jjxy.zykj.edu.cn': 'https://jjxy.zykj.edu.cn/skin/sites/2023jgxb/d/images/favicon.ico',
+    'glxy.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'dysy.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'tjxy.zykj.edu.cn': 'https://tjxy.zykj.edu.cn/skin/sites/2023lgxb/d/images/favicon.ico',
+    'jdxy.zykj.edu.cn': 'https://jdxy.zykj.edu.cn/skin/sites/2023lgxb/d/images/favicon.ico',
+    'xxgcxy.zykj.edu.cn': 'https://xxgcxy.zykj.edu.cn/skin/sites/2023lgxb/d/images/favicon.ico',
+    'dqydzgcxy.zykj.edu.cn': 'https://dqydzgcxy.zykj.edu.cn/skin/sites/2023lgxb/d/images/favicon.ico',
+    'ztsy.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'wcxy.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'wyxy.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'ycsy.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'jyxy.zykj.edu.cn': 'https://jyxy.zykj.edu.cn/images/favicon.ico',
+    'yywdxy.zykj.edu.cn': 'https://yywdxy.zykj.edu.cn/images/favicon.ico',
+    'yssjxy.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'ggys.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'mkszyxy.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'ggtyjyzx.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'dwzzb.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'xwzx.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'jwbgs.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'jsfzzx.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'xgc.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'hqc.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'gh.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'tw.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'dzb.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'fzghc.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'jwc.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'kjc.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'zs.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'job.zykj.edu.cn': 'https://img.goworkla.cn/college/5c2c5007c623471b949089fb/logo.png',
+    'oia.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'gjhzyjlc.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'hr.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'nic.zykj.edu.cn': 'https://nic.zykj.edu.cn/images/favicon.png',
+    'tsg.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'xljkjyzx.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+    'xyh.zykj.edu.cn': 'https://www.zykj.edu.cn/favicon.ico',
+};
+
+function getFavicon(url) {
+    try {
+        const host = new URL(url).host;
+        return FAVICON_MAP[host] || 'https://www.zykj.edu.cn/favicon.ico';
+    } catch {
+        return 'https://www.zykj.edu.cn/favicon.ico';
+    }
+}
 
 // ============================================================
 // Route configuration
@@ -917,7 +968,7 @@ let deal = async (ctx) => {
         link: config.url,
         description: config.desc,
         language: 'zh-cn',
-        image: ICON,
+        image: getFavicon(config.url),
         items: detailedItems.filter((i) => i.title),
     };
 
