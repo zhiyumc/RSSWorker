@@ -91,16 +91,16 @@ const ROUTES = [
     { path: '/zykj/jdxy/notice', name: '机电工程学院 - 通知公告', desc: '中原科技学院机电工程学院通知公告', url: 'https://jdxy.zykj.edu.cn/6068/', needCover: false },
 
     // ===== 信息工程学院 =====
-    { path: '/zykj/xxgcxy/news', name: '信息工程学院 - 学院动态', desc: '中原科技学院信息工程学院学院动态', url: 'https://xxgcxy.zykj.edu.cn/17648/', needCover: true, coverFromArticle: true },
-    { path: '/zykj/xxgcxy/notice', name: '信息工程学院 - 通知公告', desc: '中原科技学院信息工程学院通知公告', url: 'https://xxgcxy.zykj.edu.cn/17649/', needCover: false },
+    { path: '/zykj/xxgcxy/news', name: '信息工程学院 - 学院动态', desc: '中原科技学院信息工程学院学院动态', url: 'https://xxgcxy.zykj.edu.cn/xwgg/xydt.htm', needCover: true, coverFromArticle: true },
+    { path: '/zykj/xxgcxy/notice', name: '信息工程学院 - 通知公告', desc: '中原科技学院信息工程学院通知公告', url: 'https://xxgcxy.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 电气与电子工程学院 =====
     { path: '/zykj/dqydzgcxy/news', name: '电气与电子工程学院 - 学院动态', desc: '中原科技学院电气与电子工程学院学院动态', url: 'https://dqydzgcxy.zykj.edu.cn/18888/', needCover: true, coverFromArticle: true },
     { path: '/zykj/dqydzgcxy/notice', name: '电气与电子工程学院 - 通知公告', desc: '中原科技学院电气与电子工程学院通知公告', url: 'https://dqydzgcxy.zykj.edu.cn/18889/', needCover: false },
 
     // ===== 中天书院 =====
-    { path: '/zykj/ztsy/news', name: '中天书院 - 中天动态', desc: '中原科技学院人文学部中天书院中天动态', url: 'https://ztsy.zykj.edu.cn/16335/', needCover: true, coverFromArticle: false },
-    { path: '/zykj/ztsy/notice', name: '中天书院 - 通知公告', desc: '中原科技学院人文学部中天书院通知公告', url: 'https://ztsy.zykj.edu.cn/16336/', needCover: false },
+    { path: '/zykj/ztsy/news', name: '中天书院 - 中天动态', desc: '中原科技学院人文学部中天书院中天动态', url: 'https://ztsy.zykj.edu.cn/', needCover: true, coverFromArticle: false },
+    { path: '/zykj/ztsy/notice', name: '中天书院 - 通知公告', desc: '中原科技学院人文学部中天书院通知公告', url: 'https://ztsy.zykj.edu.cn/', needCover: false },
 
     // ===== 文学与传媒学院 =====
     { path: '/zykj/wcxy/news', name: '文学与传媒学院 - 学院新闻', desc: '中原科技学院文学与传媒学院学院新闻', url: 'https://wcxy.zykj.edu.cn/xwgg/xyxw.htm', needCover: true, coverFromArticle: true },
@@ -120,11 +120,11 @@ const ROUTES = [
     { path: '/zykj/jyxy/notice', name: '教育学院 - 通知公告', desc: '中原科技学院教育学院通知公告', url: 'https://jyxy.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 音乐舞蹈学院 =====
-    { path: '/zykj/yywdxy/news', name: '音乐舞蹈学院 - 原初动态', desc: '中原科技学院音乐舞蹈学院原初动态', url: 'https://yywdxy.zykj.edu.cn/xwgg/xydt.htm', needCover: true, coverFromArticle: false },
+    { path: '/zykj/yywdxy/news', name: '音乐舞蹈学院 - 学院动态', desc: '中原科技学院音乐舞蹈学院学院动态', url: 'https://yywdxy.zykj.edu.cn/xwgg/xydt.htm', needCover: true, coverFromArticle: false },
     { path: '/zykj/yywdxy/notice', name: '音乐舞蹈学院 - 通知公告', desc: '中原科技学院音乐舞蹈学院通知公告', url: 'https://yywdxy.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 艺术设计学院 =====
-    { path: '/zykj/yssjxy/news', name: '艺术设计学院 - 原初动态', desc: '中原科技学院艺术设计学院原初动态', url: 'https://yssjxy.zykj.edu.cn/xwgg/xydt.htm', needCover: true, coverFromArticle: false },
+    { path: '/zykj/yssjxy/news', name: '艺术设计学院 - 学院动态', desc: '中原科技学院艺术设计学院学院动态', url: 'https://yssjxy.zykj.edu.cn/xwgg/xydt.htm', needCover: true, coverFromArticle: false },
     { path: '/zykj/yssjxy/notice', name: '艺术设计学院 - 通知公告', desc: '中原科技学院艺术设计学院通知公告', url: 'https://yssjxy.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 公共艺术教育教学中心 =====
@@ -337,10 +337,10 @@ async function parseList(listUrl) {
     } else if (html.includes('news_cover_box2_list1') || html.includes('news_cover_box3')) {
         // P8CMS cover box list (gjhzyjlc homepage)
         parseP8cmsCoverList(html, baseDomain, items);
-    } else if (html.includes('news-tit')) {
+    } else if (html.includes('"news-tit') || html.includes("'news-tit")) {
         // P8CMS news list with news-tit (lxsy, dysy, ztsy, ycsy)
         parseP8cmsNewsList(html, baseDomain, items);
-    } else if (html.includes('zsjz_list1')) {
+    } else if (html.includes('zsjz_list1') || html.includes('mtgz_list1')) {
         // VSB/P8CMS simple list (zsjz_list1)
         parseZsjzList(html, baseDomain, items);
     } else if (html.includes('wslb')) {
@@ -349,7 +349,7 @@ async function parseList(listUrl) {
     } else if (html.includes('timg-linfo')) {
         // VSB sub-site timg-list (xgc, xyh)
         parseVsbSubTimgList(html, baseDomain, items);
-    } else if (html.includes('news_list1_box')) {
+    } else if (html.includes('news_list1_box') && !html.includes('mtgz_list1') && !html.includes('zsjz_list1')) {
         // VSB main site notice list (item/date/text2)
         parseVsbMainNoticeList(html, baseDomain, items);
     } else if (listUrl.includes('job.zykj.edu.cn')) {
@@ -496,8 +496,8 @@ function parseP8cmsNewsList(html, baseDomain, items) {
 
 // Parse zsjz_list1 (simple list: dd > a > div.tt + div.time)
 function parseZsjzList(html, baseDomain, items) {
-    // Extract only the zsjz_list1 section(s) to avoid matching nav links
-    const sectionRegex = /class="[^"]*zsjz_list1[^"]*"[^>]*>([\s\S]*?)<\/dl>/g;
+    // Extract list sections (zsjz_list1 or mtgz_list1) to avoid matching nav links
+    const sectionRegex = /class="[^"]*(?:zsjz_list1|mtgz_list1)[^"]*"[^>]*>([\s\S]*?)<\/dl>/g;
     let sectionMatch;
     let sectionHtml = '';
     while ((sectionMatch = sectionRegex.exec(html)) !== null) {
@@ -528,14 +528,10 @@ function parseZsjzList(html, baseDomain, items) {
 
 // Parse VSB sub-site wslb list
 function parseVsbSubWslbList(html, baseDomain, items) {
-    // Extract only the wslb section
-    const sectionMatch = html.match(/class="[^"]*wslb[^"]*"[^>]*>([\s\S]*?)<\/div>\s*<!--/) ||
-                         html.match(/class="[^"]*wslb[^"]*"[^>]*>([\s\S]*?)<\/div>\s*<div class="/) ||
-                         html.match(/class="[^"]*wslb[^"]*"[^>]*>([\s\S]*?)<\/div>\s*$/);
-    const sectionHtml = sectionMatch ? sectionMatch[1] : html;
-    const liRegex = /<li>\s*<a\s+href="([^"]*)"[^>]*>([\s\S]*?)<\/a>\s*<\/li>/g;
+    // Use full HTML and filter by article-like hrefs to avoid nested div section extraction issues
+    const liRegex = /<li>\s*<a\s+href="([^"]*(?:info\/\d+|content-\d+)[^"]*\.(?:htm|html|shtml))"[^>]*>([\s\S]*?)<\/a>\s*<\/li>/g;
     let match;
-    while ((match = liRegex.exec(sectionHtml)) !== null) {
+    while ((match = liRegex.exec(html)) !== null) {
         const href = match[1];
         const content = match[2];
         const link = resolveUrl(href, baseDomain);
@@ -566,14 +562,10 @@ function parseVsbSubWslbList(html, baseDomain, items) {
 
 // Parse VSB sub-site timg-list (xgc, xyh)
 function parseVsbSubTimgList(html, baseDomain, items) {
-    // Extract only the section containing timg-linfo items
-    const sectionMatch = html.match(/class="[^"]*timg-list[^"]*"[^>]*>([\s\S]*?)<\/ul>/) ||
-                         html.match(/<ul[^>]*>([\s\S]*?)<\/ul>\s*<div class="pagination/);
-    let sectionHtml = sectionMatch ? sectionMatch[1] : html;
-    // Only keep li elements that contain timg-linfo
-    const liRegex = /<li[^>]*>\s*<a\s+href="([^"]*)"[^>]*>([\s\S]*?)<\/a>\s*<\/li>/g;
+    // Use full HTML and filter by article-like hrefs
+    const liRegex = /<li[^>]*>\s*<a\s+href="([^"]*(?:info\/\d+|content-\d+)[^"]*\.(?:htm|html|shtml))"[^>]*>([\s\S]*?)<\/a>\s*<\/li>/g;
     let match;
-    while ((match = liRegex.exec(sectionHtml)) !== null) {
+    while ((match = liRegex.exec(html)) !== null) {
         const href = match[1];
         const content = match[2];
         const link = resolveUrl(href, baseDomain);
@@ -916,6 +908,7 @@ let deal = async (ctx) => {
     const limitedItems = listItems.slice(0, 15);
 
     // Fetch article details in parallel
+    const deptName = config.name.split(' - ')[0];
     const detailedItems = await Promise.all(
         limitedItems.map(
             async (item) => {
@@ -947,7 +940,7 @@ let deal = async (ctx) => {
                         link: item.link,
                         description: description || '暂无内容',
                         pubDate: item.date || article.date || '',
-                        author: article.author || item.author || config.name.split(' - ')[0],
+                        author: article.author ? `${deptName}${article.author}` : (item.author ? `${deptName}${item.author}` : deptName),
                         enclosure,
                     };
                 } catch (e) {
@@ -956,7 +949,7 @@ let deal = async (ctx) => {
                         link: item.link,
                         description: item.summary || '内容获取失败',
                         pubDate: item.date || '',
-                        author: item.author || '',
+                        author: deptName,
                     };
                 }
             },
