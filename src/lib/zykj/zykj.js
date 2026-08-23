@@ -186,12 +186,12 @@ const ROUTES = [
     { path: '/zykj/fzghc/notice', name: '发展规划处 - 通知公告', desc: '中原科技学院发展规划处通知公告', url: 'https://fzghc.zykj.edu.cn/bmdt/tzgg.htm', needCover: false },
 
     // ===== 教务处 =====
-    { path: '/zykj/jwc/bmdt', name: '教务处 - 部门动态', desc: '中原科技学院教务处部门动态', url: 'https://jwc.zykj.edu.cn/8942/', needCover: true, coverFromArticle: true },
-    { path: '/zykj/jwc/sxjd', name: '教务处 - 实习基地', desc: '中原科技学院教务处实习基地', url: 'https://jwc.zykj.edu.cn/13508/', needCover: true, coverFromArticle: true },
-    { path: '/zykj/jwc/sjjx', name: '教务处 - 实践教学', desc: '中原科技学院教务处实践教学', url: 'https://jwc.zykj.edu.cn/8912/', needCover: true, coverFromArticle: true },
-    { path: '/zykj/jwc/sysaq', name: '教务处 - 实验室安全', desc: '中原科技学院教务处实验室安全', url: 'https://jwc.zykj.edu.cn/16433/', needCover: true, coverFromArticle: true },
-    { path: '/zykj/jwc/sjwj', name: '教务处 - 上级文件', desc: '中原科技学院教务处上级文件', url: 'https://jwc.zykj.edu.cn/8894/', needCover: false },
-    { path: '/zykj/jwc/xxwj', name: '教务处 - 学校文件', desc: '中原科技学院教务处学校文件', url: 'https://jwc.zykj.edu.cn/8895/', needCover: false },
+    { path: '/zykj/jwc/bmdt', name: '教务处 - 部门动态', desc: '中原科技学院教务处部门动态', url: 'https://jwc.zykj.edu.cn/index/bmdt.htm', needCover: true, coverFromArticle: true },
+    { path: '/zykj/jwc/sxjd', name: '教务处 - 实习基地', desc: '中原科技学院教务处实习基地', url: 'https://jwc.zykj.edu.cn/sjjx/sxjd.htm', needCover: true, coverFromArticle: true },
+    { path: '/zykj/jwc/sjjx', name: '教务处 - 实践教学', desc: '中原科技学院教务处实践教学', url: 'https://jwc.zykj.edu.cn/sjjx/sjjx.htm', needCover: true, coverFromArticle: true },
+    { path: '/zykj/jwc/sysaq', name: '教务处 - 实验室安全', desc: '中原科技学院教务处实验室安全', url: 'https://jwc.zykj.edu.cn/sjjx/sysaq.htm', needCover: true, coverFromArticle: true },
+    { path: '/zykj/jwc/sjwj', name: '教务处 - 上级文件', desc: '中原科技学院教务处上级文件', url: 'https://jwc.zykj.edu.cn/tzgg/sjwj.htm', needCover: false },
+    { path: '/zykj/jwc/xxwj', name: '教务处 - 学校文件', desc: '中原科技学院教务处学校文件', url: 'https://jwc.zykj.edu.cn/tzgg/xxwj.htm', needCover: false },
 
     // ===== 科技处 =====
     { path: '/zykj/kjc/kydt', name: '科技处 - 科研动态', desc: '中原科技学院科技处科研动态', url: 'https://kjc.zykj.edu.cn/kydt.htm', needCover: true, coverFromArticle: true },
@@ -227,8 +227,8 @@ const ROUTES = [
     { path: '/zykj/nic/notice', name: '信息化建设与管理中心 - 通知公告', desc: '中原科技学院信息化建设与管理中心通知公告', url: 'https://nic.zykj.edu.cn/index/tzgg.htm', needCover: false },
 
     // ===== 图书馆 =====
-    { path: '/zykj/tsg/news', name: '图书馆 - 新闻动态', desc: '中原科技学院图书馆新闻动态', url: 'https://tsg.zykj.edu.cn/2899/', needCover: true, coverFromArticle: true },
-    { path: '/zykj/tsg/notice', name: '图书馆 - 通知公告', desc: '中原科技学院图书馆通知公告', url: 'https://tsg.zykj.edu.cn/2898/', needCover: false },
+    { path: '/zykj/tsg/news', name: '图书馆 - 新闻动态', desc: '中原科技学院图书馆新闻动态', url: 'https://tsg.zykj.edu.cn/xwgg/xwdt.htm', needCover: true, coverFromArticle: true },
+    { path: '/zykj/tsg/notice', name: '图书馆 - 通知公告', desc: '中原科技学院图书馆通知公告', url: 'https://tsg.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 学报编辑部 =====
     { path: '/zykj/xbbjb/xbdt', name: '学报编辑部 - 学报动态', desc: '中原科技学院学报编辑部学报动态', url: 'https://www.zykj.edu.cn/dzjg/xbbjb/xbdt.htm', needCover: true, coverFromArticle: true },
@@ -330,6 +330,12 @@ function normalizeDate(raw) {
     // "2026.07.17" or "2026.07.17." -> "2026-07-17"
     const m2 = d.match(/^(\d{4})\.(\d{1,2})\.(\d{1,2})/);
     if (m2) return `${m2[1]}-${m2[2].padStart(2, '0')}-${m2[3].padStart(2, '0')}`;
+    // "2026/06/09 16:20" or "2026/06/09" -> "2026-06-09"
+    const m3 = d.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})/);
+    if (m3) return `${m3[1]}-${m3[2].padStart(2, '0')}-${m3[3].padStart(2, '0')}`;
+    // "2026年02月25日" -> "2026-02-25"
+    const m4 = d.match(/^(\d{4})年(\d{1,2})月(\d{1,2})日/);
+    if (m4) return `${m4[1]}-${m4[2].padStart(2, '0')}-${m4[3].padStart(2, '0')}`;
     return d;
 }
 
@@ -359,6 +365,9 @@ async function parseList(listUrl) {
     } else if (html.includes('zsjz_list1') || html.includes('mtgz_list1')) {
         // VSB/P8CMS simple list (zsjz_list1)
         parseZsjzList(html, baseDomain, items);
+    } else if (html.includes('rsxw_list1')) {
+        // VSB sub-site rsxw_list1 list with pic + days/month date (tsg news)
+        parseRsxwList(html, baseDomain, items);
     } else if (html.includes('wslb') || html.includes('"wzlb"')) {
         // VSB sub-site wslb list (glxy, wcxy, wyxy, etc.)
         parseVsbSubWslbList(html, baseDomain, items);
@@ -381,7 +390,7 @@ async function parseList(listUrl) {
 
 // Parse VSB main site news list (dl.news_list2)
 function parseVsbMainNewsList(html, baseDomain, items) {
-    const blockRegex = /<dd>\s*<a\s+href="([^"]*)"[^>]*>[\s\S]*?<\/a>\s*<\/dd>/g;
+    const blockRegex = /<dd[^>]*>\s*<a\s+href="([^"]*)"[^>]*>[\s\S]*?<\/a>\s*<\/dd>/g;
     let match;
     while ((match = blockRegex.exec(html)) !== null) {
         const block = match[1] + match[0];
@@ -521,7 +530,7 @@ function parseZsjzList(html, baseDomain, items) {
     }
     if (!sectionHtml) sectionHtml = html;
 
-    const ddRegex = /<dd>\s*<a\s+href="([^"]*)"[^>]*>([\s\S]*?)<\/a>\s*<\/dd>/g;
+    const ddRegex = /<dd[^>]*>\s*<a\s+href="([^"]*)"[^>]*>([\s\S]*?)<\/a>\s*<\/dd>/g;
     let match;
     while ((match = ddRegex.exec(sectionHtml)) !== null) {
         const href = match[1];
@@ -563,6 +572,10 @@ function parseVsbSubWslbList(html, baseDomain, items) {
             date = normalizeDate(dateMatch[1]);
         }
 
+        // Extract summary from <p> (used as fallback when article page is unavailable)
+        const pMatch = content.match(/<p[^>]*>([\s\S]*?)<\/p>/);
+        const summary = pMatch ? pMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+
         // Extract thumbnail
         const imgMatch = content.match(/<img[^>]+src="([^"]+)"/);
         let thumbnail = '';
@@ -571,7 +584,45 @@ function parseVsbSubWslbList(html, baseDomain, items) {
         }
 
         if (title && link) {
-            items.push({ title, link, date, author: '', thumbnail });
+            items.push({ title, link, date, author: '', thumbnail, summary });
+        }
+    }
+}
+
+// Parse VSB sub-site rsxw_list1 list (tsg news): dd > a > rsxw_list1_pic(days/month) + con_tt/con_text
+function parseRsxwList(html, baseDomain, items) {
+    const liRegex = /<dd[^>]*>\s*<a\s+href="([^"]*(?:info\/\d+|content-\d+)[^"]*\.(?:htm|html|shtml))"[^>]*>([\s\S]*?)<\/a>\s*<\/dd>/g;
+    let match;
+    while ((match = liRegex.exec(html)) !== null) {
+        const href = match[1];
+        const content = match[2];
+        const link = resolveUrl(href, baseDomain);
+
+        // Extract title from rsxw_list1_con_tt
+        const titleMatch = content.match(/class="rsxw_list1_con_tt[^"]*"[^>]*>([\s\S]*?)<\/div>/);
+        const title = titleMatch ? titleMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+
+        // Extract date from days + month divs (e.g. days=10, month=2026-06 -> 2026-06-10)
+        let date = '';
+        const daysMatch = content.match(/class="days[^"]*"[^>]*>\s*(\d{1,2})/);
+        const monthMatch = content.match(/class="month[^"]*"[^>]*>\s*(\d{4})-(\d{1,2})/);
+        if (daysMatch && monthMatch) {
+            date = `${monthMatch[1]}-${monthMatch[2].padStart(2, '0')}-${daysMatch[1].padStart(2, '0')}`;
+        }
+
+        // Extract summary from rsxw_list1_con_text
+        const pMatch = content.match(/class="rsxw_list1_con_text[^"]*"[^>]*>([\s\S]*?)<\/div>/);
+        const summary = pMatch ? pMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+
+        // Extract thumbnail
+        const imgMatch = content.match(/<img[^>]+src="([^"]+)"/);
+        let thumbnail = '';
+        if (imgMatch) {
+            thumbnail = imgMatch[1].startsWith('http') ? imgMatch[1] : (imgMatch[1].startsWith('/') ? baseDomain + imgMatch[1] : resolveUrl(imgMatch[1], baseDomain));
+        }
+
+        if (title && link) {
+            items.push({ title, link, date, author: '', thumbnail, summary });
         }
     }
 }
@@ -609,42 +660,53 @@ function parseVsbSubTimgList(html, baseDomain, items) {
 
 // Parse P8CMS cover box list (gjhzyjlc homepage)
 function parseP8cmsCoverList(html, baseDomain, items) {
-    // Parse big image items (news_cover_box2_list1_item1)
-    const bigRegex = /<dd>\s*<a\s+href="([^"]*)"[^>]*>[\s\S]*?<div class="news_cover_box2_list1_item1">[\s\S]*?<div class="time[^"]*"[^>]*>([\s\S]*?)<\/div>[\s\S]*?<div class="tt[^"]*"[^>]*>([\s\S]*?)<\/div>[\s\S]*?<\/a>\s*<\/dd>/g;
+    // Extract each <dd>...</dd> block first (tempered regex prevents crossing dd boundaries),
+    // then classify by class names inside the block. This avoids wrongly pairing a nav
+    // <dd><a href="index.htm"> with a later carousel item's title/date.
+    const ddRegex = /<dd[^>]*>((?:(?!<\/dd>)[\s\S])*)<\/dd>/g;
     let match;
-    while ((match = bigRegex.exec(html)) !== null) {
-        const link = resolveUrl(match[1], baseDomain);
-        const date = match[2].replace(/<[^>]*>/g, '').trim();
-        const title = match[3].replace(/<[^>]*>/g, '').trim();
+    while ((match = ddRegex.exec(html)) !== null) {
+        const block = match[1];
+        const aMatch = block.match(/<a\s+href="([^"]*)"[^>]*>([\s\S]*)/);
+        if (!aMatch) continue;
+        const link = resolveUrl(aMatch[1], baseDomain);
+        const content = aMatch[2];
 
-        // Extract thumbnail
-        const imgMatch = match[0].match(/<img[^>]+src="([^"]+)"/);
-        let thumbnail = '';
-        if (imgMatch) {
-            thumbnail = imgMatch[1].startsWith('/') ? baseDomain + imgMatch[1] : imgMatch[1];
+        // Big image item (news_cover_box2_list1_item1)
+        if (block.includes('news_cover_box2_list1_item1')) {
+            const timeMatch = content.match(/class="time[^"]*"[^>]*>([\s\S]*?)<\/div>/);
+            const ttMatch = content.match(/class="tt[^"]*"[^>]*>([\s\S]*?)<\/div>/);
+            const date = timeMatch ? normalizeDate(timeMatch[1]) : '';
+            const title = ttMatch ? ttMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+
+            const imgMatch = block.match(/<img[^>]+src="([^"]+)"/);
+            let thumbnail = '';
+            if (imgMatch) {
+                thumbnail = imgMatch[1].startsWith('/') ? baseDomain + imgMatch[1] : imgMatch[1];
+            }
+
+            if (title && link) {
+                items.push({ title, link, date, author: '', thumbnail });
+            }
+            continue;
         }
 
-        if (title && link) {
-            items.push({ title, link, date, author: '', thumbnail });
-        }
-    }
+        // Small image item (news_cover_box2_r_list)
+        if (block.includes('news_cover_box2_r_list_tt')) {
+            const ttMatch = content.match(/class="news_cover_box2_r_list_tt[^"]*"[^>]*>([\s\S]*?)<\/div>/);
+            const timeMatch = content.match(/class="news_cover_box2_r_list_time[^"]*"[^>]*>([\s\S]*?)<\/div>/);
+            const title = ttMatch ? ttMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+            const date = timeMatch ? normalizeDate(timeMatch[1]) : '';
 
-    // Parse small image items (news_cover_box2_r_list)
-    const smallRegex = /<dd>\s*<a\s+href="([^"]*)"[^>]*>[\s\S]*?class="news_cover_box2_r_list_tt[^"]*"[^>]*>([\s\S]*?)<\/div>[\s\S]*?class="news_cover_box2_r_list_time[^"]*"[^>]*>([\s\S]*?)<\/div>[\s\S]*?<\/a>\s*<\/dd>/g;
-    while ((match = smallRegex.exec(html)) !== null) {
-        const link = resolveUrl(match[1], baseDomain);
-        const title = match[2].replace(/<[^>]*>/g, '').trim();
-        const date = match[3].replace(/<[^>]*>/g, '').trim();
+            const imgMatch = block.match(/<img[^>]+src="([^"]+)"/);
+            let thumbnail = '';
+            if (imgMatch) {
+                thumbnail = imgMatch[1].startsWith('/') ? baseDomain + imgMatch[1] : imgMatch[1];
+            }
 
-        // Extract thumbnail
-        const imgMatch = match[0].match(/<img[^>]+src="([^"]+)"/);
-        let thumbnail = '';
-        if (imgMatch) {
-            thumbnail = imgMatch[1].startsWith('/') ? baseDomain + imgMatch[1] : imgMatch[1];
-        }
-
-        if (title && link) {
-            items.push({ title, link, date, author: '', thumbnail });
+            if (title && link) {
+                items.push({ title, link, date, author: '', thumbnail });
+            }
         }
     }
 
@@ -657,7 +719,7 @@ function parseP8cmsCoverList(html, baseDomain, items) {
         // Try to find date
         const dateMatch = match[0].match(/class="news_cover_box3_r_list_time[^"]*"[^>]*>([\s\S]*?)<\/div>/) ||
                          match[0].match(/(\d{4}年\d{2}月\d{2}日)/);
-        const date = dateMatch ? dateMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+        const date = dateMatch ? normalizeDate(dateMatch[1]) : '';
 
         // Thumbnail
         const imgMatch = match[0].match(/<img[^>]+src="([^"]+)"/);
@@ -696,7 +758,7 @@ function parseJobList(html, baseDomain, listUrl, items) {
     let itemMatches = [];
     let im;
     while ((im = itemRegex.exec(html)) !== null) {
-        itemMatches.push({ title: im[1].trim(), date: im[2].trim() });
+        itemMatches.push({ title: im[1].trim(), date: normalizeDate(im[2]) });
     }
 
     // Pair them up
@@ -925,6 +987,15 @@ async function parseArticle(articleUrl) {
 // ============================================================
 // Main handler
 // ============================================================
+// Cap description length to avoid oversized RSS items (e.g. huge table pages)
+const MAX_DESC_LENGTH = 30000;
+function truncateDescription(desc) {
+    if (desc && desc.length > MAX_DESC_LENGTH) {
+        return desc.slice(0, MAX_DESC_LENGTH) + '<p>（内容过长，已截断，请查看原文）</p>';
+    }
+    return desc;
+}
+
 let deal = async (ctx) => {
     const routePath = ctx.req.path.replace(/^\/rss/, '');
     const config = ROUTES.find((r) => r.path === routePath);
@@ -970,7 +1041,7 @@ let deal = async (ctx) => {
                     return {
                         title: item.title,
                         link: item.link,
-                        description: description || '暂无内容',
+                        description: truncateDescription(description) || '暂无内容',
                         pubDate: item.date || article.date || '',
                         author: article.author ? `${deptName}${article.author}` : (item.author ? `${deptName}${item.author}` : deptName),
                         enclosure,
