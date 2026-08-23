@@ -67,40 +67,40 @@ const ROUTES = [
     { path: '/zykj/school/mtgz', name: '中原科技学院 - 媒体关注', desc: '中原科技学院媒体关注栏目，汇总各类媒体对学校的报道', url: 'https://www.zykj.edu.cn/index/xwzx/mtgz.htm', needCover: true, coverFromArticle: false },
 
     // ===== 立心书院 =====
-    { path: '/zykj/lxsy/news', name: '立心书院 - 立心动态', desc: '中原科技学院经济与管理学部立心书院立心动态', url: 'https://lxsy.zykj.edu.cn/15320/', needCover: true, coverFromArticle: false },
-    { path: '/zykj/lxsy/notice', name: '立心书院 - 通知公告', desc: '中原科技学院经济与管理学部立心书院通知公告', url: 'https://lxsy.zykj.edu.cn/15321/', needCover: false },
+    { path: '/zykj/lxsy/news', name: '立心书院 - 立心动态', desc: '中原科技学院经济与管理学部立心书院立心动态', url: 'https://lxsy.zykj.edu.cn/syxw/lxdt.htm', needCover: true, coverFromArticle: false },
+    { path: '/zykj/lxsy/notice', name: '立心书院 - 通知公告', desc: '中原科技学院经济与管理学部立心书院通知公告', url: 'https://lxsy.zykj.edu.cn/syxw/tzgg.htm', needCover: false },
 
     // ===== 经济学院 =====
-    { path: '/zykj/jjxy/news', name: '经济学院 - 学院动态', desc: '中原科技学院经济学院学院动态', url: 'https://jjxy.zykj.edu.cn/17805/', needCover: true, coverFromArticle: false },
-    { path: '/zykj/jjxy/notice', name: '经济学院 - 通知公告', desc: '中原科技学院经济学院通知公告', url: 'https://jjxy.zykj.edu.cn/17967/', needCover: false },
+    { path: '/zykj/jjxy/news', name: '经济学院 - 学院动态', desc: '中原科技学院经济学院学院动态', url: 'https://jjxy.zykj.edu.cn/xwgg/xydt.htm', needCover: true, coverFromArticle: false },
+    { path: '/zykj/jjxy/notice', name: '经济学院 - 通知公告', desc: '中原科技学院经济学院通知公告', url: 'https://jjxy.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 管理学院 =====
     { path: '/zykj/glxy/news', name: '管理学院 - 学院动态', desc: '中原科技学院管理学院学院动态', url: 'https://glxy.zykj.edu.cn/xwgg/xydt.htm', needCover: true, coverFromArticle: false },
     { path: '/zykj/glxy/notice', name: '管理学院 - 通知公告', desc: '中原科技学院管理学院通知公告', url: 'https://glxy.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 鼎元书院 =====
-    { path: '/zykj/dysy/news', name: '鼎元书院 - 鼎元动态', desc: '中原科技学院理工学部鼎元书院鼎元动态', url: 'https://dysy.zykj.edu.cn/16367/', needCover: true, coverFromArticle: false },
-    { path: '/zykj/dysy/notice', name: '鼎元书院 - 通知公告', desc: '中原科技学院理工学部鼎元书院通知公告', url: 'https://dysy.zykj.edu.cn/16368/', needCover: false },
+    { path: '/zykj/dysy/news', name: '鼎元书院 - 鼎元动态', desc: '中原科技学院理工学部鼎元书院鼎元动态', url: 'https://dysy.zykj.edu.cn/syxw/dydt.htm', needCover: true, coverFromArticle: false },
+    { path: '/zykj/dysy/notice', name: '鼎元书院 - 通知公告', desc: '中原科技学院理工学部鼎元书院通知公告', url: 'https://dysy.zykj.edu.cn/syxw/tzgg.htm', needCover: false },
 
     // ===== 土木工程学院 =====
-    { path: '/zykj/tjxy/news', name: '土木工程学院 - 学院新闻', desc: '中原科技学院土木工程学院学院新闻', url: 'https://tjxy.zykj.edu.cn/13020/', needCover: true, coverFromArticle: true },
-    { path: '/zykj/tjxy/notice', name: '土木工程学院 - 通知公告', desc: '中原科技学院土木工程学院通知公告', url: 'https://tjxy.zykj.edu.cn/13019/', needCover: false },
+    { path: '/zykj/tjxy/news', name: '土木工程学院 - 学院新闻', desc: '中原科技学院土木工程学院学院新闻', url: 'https://tjxy.zykj.edu.cn/xwgg/xydt.htm', needCover: true, coverFromArticle: true },
+    { path: '/zykj/tjxy/notice', name: '土木工程学院 - 通知公告', desc: '中原科技学院土木工程学院通知公告', url: 'https://tjxy.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 机电工程学院 =====
-    { path: '/zykj/jdxy/news', name: '机电工程学院 - 学院动态', desc: '中原科技学院机电工程学院学院动态', url: 'https://jdxy.zykj.edu.cn/6067/', needCover: true, coverFromArticle: true },
-    { path: '/zykj/jdxy/notice', name: '机电工程学院 - 通知公告', desc: '中原科技学院机电工程学院通知公告', url: 'https://jdxy.zykj.edu.cn/6068/', needCover: false },
+    { path: '/zykj/jdxy/news', name: '机电工程学院 - 学院动态', desc: '中原科技学院机电工程学院学院动态', url: 'https://jdxy.zykj.edu.cn/xwgg/xydt.htm', needCover: true, coverFromArticle: true },
+    { path: '/zykj/jdxy/notice', name: '机电工程学院 - 通知公告', desc: '中原科技学院机电工程学院通知公告', url: 'https://jdxy.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 信息工程学院 =====
     { path: '/zykj/xxgcxy/news', name: '信息工程学院 - 学院动态', desc: '中原科技学院信息工程学院学院动态', url: 'https://xxgcxy.zykj.edu.cn/xwgg/xydt.htm', needCover: true, coverFromArticle: true },
     { path: '/zykj/xxgcxy/notice', name: '信息工程学院 - 通知公告', desc: '中原科技学院信息工程学院通知公告', url: 'https://xxgcxy.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 电气与电子工程学院 =====
-    { path: '/zykj/dqydzgcxy/news', name: '电气与电子工程学院 - 学院动态', desc: '中原科技学院电气与电子工程学院学院动态', url: 'https://dqydzgcxy.zykj.edu.cn/18888/', needCover: true, coverFromArticle: true },
-    { path: '/zykj/dqydzgcxy/notice', name: '电气与电子工程学院 - 通知公告', desc: '中原科技学院电气与电子工程学院通知公告', url: 'https://dqydzgcxy.zykj.edu.cn/18889/', needCover: false },
+    { path: '/zykj/dqydzgcxy/news', name: '电气与电子工程学院 - 学院动态', desc: '中原科技学院电气与电子工程学院学院动态', url: 'https://dqydzgcxy.zykj.edu.cn/xwgg/xydt.htm', needCover: true, coverFromArticle: true },
+    { path: '/zykj/dqydzgcxy/notice', name: '电气与电子工程学院 - 通知公告', desc: '中原科技学院电气与电子工程学院通知公告', url: 'https://dqydzgcxy.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 中天书院 =====
-    { path: '/zykj/ztsy/news', name: '中天书院 - 中天动态', desc: '中原科技学院人文学部中天书院中天动态', url: 'https://ztsy.zykj.edu.cn/', needCover: true, coverFromArticle: false },
-    { path: '/zykj/ztsy/notice', name: '中天书院 - 通知公告', desc: '中原科技学院人文学部中天书院通知公告', url: 'https://ztsy.zykj.edu.cn/', needCover: false },
+    { path: '/zykj/ztsy/news', name: '中天书院 - 中天动态', desc: '中原科技学院人文学部中天书院中天动态', url: 'https://ztsy.zykj.edu.cn/syxw/ztdt.htm', needCover: true, coverFromArticle: false },
+    { path: '/zykj/ztsy/notice', name: '中天书院 - 通知公告', desc: '中原科技学院人文学部中天书院通知公告', url: 'https://ztsy.zykj.edu.cn/syxw/tzgg.htm', needCover: false },
 
     // ===== 文学与传媒学院 =====
     { path: '/zykj/wcxy/news', name: '文学与传媒学院 - 学院新闻', desc: '中原科技学院文学与传媒学院学院新闻', url: 'https://wcxy.zykj.edu.cn/xwgg/xyxw.htm', needCover: true, coverFromArticle: true },
@@ -318,6 +318,22 @@ function decodeEntities(text) {
 }
 
 // ============================================================
+// Helper: normalize date strings from list pages
+// Handles "MM-DD<span>YYYY</span>" -> "YYYY-MM-DD" and "YYYY.MM.DD" -> "YYYY-MM-DD"
+// ============================================================
+function normalizeDate(raw) {
+    if (!raw) return '';
+    const d = raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+    // "05-23 2026" or "05-232026" (MM-DD YYYY) -> "2026-05-23"
+    const m1 = d.match(/^(\d{1,2})-(\d{1,2})\s*(\d{4})$/);
+    if (m1) return `${m1[3]}-${m1[1].padStart(2, '0')}-${m1[2].padStart(2, '0')}`;
+    // "2026.07.17" or "2026.07.17." -> "2026-07-17"
+    const m2 = d.match(/^(\d{4})\.(\d{1,2})\.(\d{1,2})/);
+    if (m2) return `${m2[1]}-${m2[2].padStart(2, '0')}-${m2[3].padStart(2, '0')}`;
+    return d;
+}
+
+// ============================================================
 // Parse list page - extract article items
 // Uses HTMLRewriter for streaming parse of different list structures
 // ============================================================
@@ -343,7 +359,7 @@ async function parseList(listUrl) {
     } else if (html.includes('zsjz_list1') || html.includes('mtgz_list1')) {
         // VSB/P8CMS simple list (zsjz_list1)
         parseZsjzList(html, baseDomain, items);
-    } else if (html.includes('wslb')) {
+    } else if (html.includes('wslb') || html.includes('"wzlb"')) {
         // VSB sub-site wslb list (glxy, wcxy, wyxy, etc.)
         parseVsbSubWslbList(html, baseDomain, items);
     } else if (html.includes('timg-linfo')) {
@@ -518,7 +534,7 @@ function parseZsjzList(html, baseDomain, items) {
 
         // Extract date from div.time
         const dateMatch = content.match(/class="time[^"]*"[^>]*>([\s\S]*?)<\/div>/);
-        const date = dateMatch ? dateMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+        const date = dateMatch ? normalizeDate(dateMatch[1]) : '';
 
         if (title && link) {
             items.push({ title, link, date, author: '', thumbnail: '' });
@@ -544,7 +560,7 @@ function parseVsbSubWslbList(html, baseDomain, items) {
         const dateMatch = content.match(/class="wtime"[^>]*>([\s\S]*?)<\/div>/);
         let date = '';
         if (dateMatch) {
-            date = dateMatch[1].replace(/<[^>]*>/g, '').trim();
+            date = normalizeDate(dateMatch[1]);
         }
 
         // Extract thumbnail
@@ -779,6 +795,22 @@ async function parseArticle(articleUrl) {
             // Extract 来源
             const sourceMatch = metaText.match(/来源[:：]([^<]*)/);
             if (sourceMatch && !author) author = decodeEntities(sourceMatch[1].trim());
+        }
+
+        // Try rq class (ztsy and similar sub-sites: 日期：YYYY-MM-DD)
+        if (!author || !date) {
+            const rqMatches = html.match(/class="rq"[^>]*>([^<]*)</g);
+            if (rqMatches) {
+                for (const rq of rqMatches) {
+                    const text = rq.replace(/<[^>]*>/g, '').trim();
+                    const dateM = text.match(/日期[:：]\s*(\d{4}-\d{2}-\d{2})/);
+                    if (dateM && !date) date = dateM[1];
+                    const authorM = text.match(/(?:作者|发布人)[:：]\s*([^\s<]+)/);
+                    if (authorM && !author) author = decodeEntities(authorM[1].trim());
+                    const sourceM = text.match(/来源[:：]\s*([^\s<]+)/);
+                    if (sourceM && !author) author = decodeEntities(sourceM[1].trim());
+                }
+            }
         }
 
         // Try news_det_sm (gjhzyjlc)
