@@ -2,3 +2,13 @@ name = "rss-worker"
 main = "src/worker.js"
 compatibility_date = "2026-05-23"
 compatibility_flags = ["nodejs_compat"]
+
+# Iris Analytics 绑定（数据集须与 Iris 部署一致，才能在同一仪表板查看）
+# https://github.com/zhiyumc/Iris-Analytics
+[[analytics_engine_datasets]]
+binding = "AnalyticsBinding"
+dataset = "AnalyticsDataset"
+
+# 首页 tracker 注入开关：设置为 Iris 部署地址后生效，如 https://iris-xxx.pages.dev
+# [vars]
+# IRIS_TRACKER_URL = "https://iris-xxx.pages.dev"

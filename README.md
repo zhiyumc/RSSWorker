@@ -200,6 +200,28 @@ RSSWorker 是一个轻量级的 RSS 订阅工具，可以部署在 Cloudflare Wo
 
 [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/yllhwa/RSSWorker)
 
+## 访问统计（Iris Analytics）
+
+内置 [Iris Analytics](https://github.com/zhiyumc/Iris-Analytics) 接入（基于 Cloudflare Workers Analytics Engine），提供两类统计：
+
+| website-id | 统计对象 | 接入方式 |
+|------------|---------|----------|
+| `rssworker` | 首页浏览器访问 | tracker.min.js（配置 `IRIS_TRACKER_URL` 后自动注入） |
+| `rssworker-feeds` | RSS 路由抓取（含阅读器） | 服务端直接写数据点（`wrangler.toml` 已配置绑定） |
+
+### 配置步骤
+
+1. **数据集绑定**（RSS 抓取统计）：`wrangler.toml` 已包含 `AnalyticsBinding` → `AnalyticsDataset` 绑定，需与 Iris 部署使用**同一个数据集**，重新部署后生效；若在 Cloudflare 控制台配置，在 Worker 设置 → 绑定 → Analytics Engine 中添加（变量名 `AnalyticsBinding`，数据集 `AnalyticsDataset`）；
+2. **首页 tracker**（浏览器访问统计）：在 Worker 设置 → 环境变量中添加 `IRIS_TRACKER_URL = https://你的 iris 部署地址`（如 `https://iris-xxx.pages.dev`），未配置时不注入任何脚本，零开销；
+3. 在 Iris 仪表板中分别用 `rssworker`、`rssworker-feeds` 查看。
+
+### 统计口径说明
+
+- RSS 抓取统计仅记录成功的 XML 响应（200/304），路由未命中的 404 页面不统计；
+- 阅读器/爬虫 UA 识别为 `RSS Reader` 设备类型，在 Iris 设备分布中独立显示；浏览器访问按 Desktop/Mobile 分类；
+- 服务端无 localStorage 去重，uv 与抓取次数相同（可在 Iris 中按 IP 去重查看）；
+- 若 Iris 配置了白名单（`CLOUDFLARE_WEBSITE_WHITELIST`），仅影响 tracker 上报，不影响服务端写入。
+
 ## 开发
 
 在 `src/lib/[网站名称]/[功能]` 参照已有的 demo 添加脚本，然后在 `src/route.js` 中添加插件即可。
