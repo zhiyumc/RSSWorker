@@ -92,8 +92,8 @@ RSSWorker 是一个轻量级的 RSS 订阅工具，可以部署在 Cloudflare Wo
 
 | 路由路径 | 名称 | 封面 |
 |----------|------|:----:|
-| `/zykj/ycsy/news` | 原初动态 | 是 |
-| `/zykj/ycsy/notice` | 通知公告 | 否 |
+| `/zykj/ycsy/news` | 团学工作 | 是 |
+| `/zykj/ycsy/notice` | 党建工作 | 否 |
 | `/zykj/jyxy/news` | 教育学院 - 学院动态 | 是 |
 | `/zykj/jyxy/sfrz` | 教育学院 - 师范认证 | 是 |
 | `/zykj/jyxy/notice` | 教育学院 - 通知公告 | 否 |

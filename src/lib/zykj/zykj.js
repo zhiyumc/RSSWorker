@@ -111,8 +111,8 @@ const ROUTES = [
     { path: '/zykj/wyxy/notice', name: '外国语学院 - 通知公告', desc: '中原科技学院外国语学院通知公告', url: 'https://wyxy.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 原初书院 =====
-    { path: '/zykj/ycsy/news', name: '原初书院 - 原初动态', desc: '中原科技学院教育与艺术学部原初书院原初动态', url: 'https://ycsy.zykj.edu.cn/16303/', needCover: true, coverFromArticle: false },
-    { path: '/zykj/ycsy/notice', name: '原初书院 - 通知公告', desc: '中原科技学院教育与艺术学部原初书院通知公告', url: 'https://ycsy.zykj.edu.cn/16304/', needCover: false },
+    { path: '/zykj/ycsy/news', name: '原初书院 - 团学工作', desc: '中原科技学院原初书院团学工作动态', url: 'https://ycsy.zykj.edu.cn/sydt/txgz.htm', needCover: true, coverFromArticle: false },
+    { path: '/zykj/ycsy/notice', name: '原初书院 - 党建工作', desc: '中原科技学院原初书院党建工作动态', url: 'https://ycsy.zykj.edu.cn/sydt/djgz.htm', needCover: false },
 
     // ===== 教育学院 =====
     { path: '/zykj/jyxy/news', name: '教育学院 - 学院动态', desc: '中原科技学院教育学院学院动态', url: 'https://jyxy.zykj.edu.cn/xwgg/xydt.htm', needCover: true, coverFromArticle: false },
@@ -128,16 +128,16 @@ const ROUTES = [
     { path: '/zykj/yssjxy/notice', name: '艺术设计学院 - 通知公告', desc: '中原科技学院艺术设计学院通知公告', url: 'https://yssjxy.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 公共艺术教育教学中心 =====
-    { path: '/zykj/ggys/news', name: '公共艺术教育教学中心 - 中心新闻', desc: '中原科技学院公共艺术教育教学中心新闻动态', url: 'https://ggys.zykj.edu.cn/13959/', needCover: true, coverFromArticle: true },
-    { path: '/zykj/ggys/notice', name: '公共艺术教育教学中心 - 通知公告', desc: '中原科技学院公共艺术教育教学中心通知公告', url: 'https://ggys.zykj.edu.cn/13958/', needCover: false },
+    { path: '/zykj/ggys/news', name: '公共艺术教育教学中心 - 中心新闻', desc: '中原科技学院公共艺术教育教学中心新闻动态', url: 'https://ggys.zykj.edu.cn/xwgg/zxxw.htm', needCover: true, coverFromArticle: true },
+    { path: '/zykj/ggys/notice', name: '公共艺术教育教学中心 - 通知公告', desc: '中原科技学院公共艺术教育教学中心通知公告', url: 'https://ggys.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 马克思主义学院 =====
-    { path: '/zykj/mkszyxy/news', name: '马克思主义学院 - 学院新闻', desc: '中原科技学院马克思主义学院学院新闻', url: 'https://mkszyxy.zykj.edu.cn/15132/', needCover: true, coverFromArticle: true },
-    { path: '/zykj/mkszyxy/notice', name: '马克思主义学院 - 通知公告', desc: '中原科技学院马克思主义学院通知公告', url: 'https://mkszyxy.zykj.edu.cn/15131/', needCover: false },
+    { path: '/zykj/mkszyxy/news', name: '马克思主义学院 - 学院新闻', desc: '中原科技学院马克思主义学院学院新闻', url: 'https://mkszyxy.zykj.edu.cn/xwgg/xyxw.htm', needCover: true, coverFromArticle: true },
+    { path: '/zykj/mkszyxy/notice', name: '马克思主义学院 - 通知公告', desc: '中原科技学院马克思主义学院通知公告', url: 'https://mkszyxy.zykj.edu.cn/xwgg/ggtz.htm', needCover: false },
 
     // ===== 公共体育教育教学中心 =====
-    { path: '/zykj/ggtyjyzx/news', name: '公共体育教育教学中心 - 新闻动态', desc: '中原科技学院公共体育教育教学中心新闻动态', url: 'https://ggtyjyzx.zykj.edu.cn/15270/', needCover: true, coverFromArticle: true },
-    { path: '/zykj/ggtyjyzx/notice', name: '公共体育教育教学中心 - 通知公告', desc: '中原科技学院公共体育教育教学中心通知公告', url: 'https://ggtyjyzx.zykj.edu.cn/15269/', needCover: false },
+    { path: '/zykj/ggtyjyzx/news', name: '公共体育教育教学中心 - 新闻动态', desc: '中原科技学院公共体育教育教学中心新闻动态', url: 'https://ggtyjyzx.zykj.edu.cn/xwgg/zxxw.htm', needCover: true, coverFromArticle: true },
+    { path: '/zykj/ggtyjyzx/notice', name: '公共体育教育教学中心 - 通知公告', desc: '中原科技学院公共体育教育教学中心通知公告', url: 'https://ggtyjyzx.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 党委组织（统战）部 =====
     { path: '/zykj/dwzzb/gzdt', name: '党委组织（统战）部 - 工作动态', desc: '中原科技学院党委组织（统战）部工作动态', url: 'https://dwzzb.zykj.edu.cn/gzdt.htm', needCover: true, coverFromArticle: true },
@@ -368,6 +368,9 @@ async function parseList(listUrl) {
     } else if (html.includes('rsxw_list1')) {
         // VSB sub-site rsxw_list1 list with pic + days/month date (tsg news)
         parseRsxwList(html, baseDomain, items);
+    } else if (html.includes('info-list') && html.includes('info-summary')) {
+        // VSB info-list with p.date + p.info-summary (ycsy 团学/党建工作)
+        parseInfoList(html, baseDomain, items);
     } else if (html.includes('wslb') || html.includes('"wzlb"')) {
         // VSB sub-site wslb list (glxy, wcxy, wyxy, etc.)
         parseVsbSubWslbList(html, baseDomain, items);
@@ -623,6 +626,32 @@ function parseRsxwList(html, baseDomain, items) {
 
         if (title && link) {
             items.push({ title, link, date, author: '', thumbnail, summary });
+        }
+    }
+}
+
+// Parse VSB info-list (ycsy 团学/党建工作): ul.info-list > li.clearfix > a > p.date + p.info-summary
+function parseInfoList(html, baseDomain, items) {
+    const liRegex = /<li[^>]*>\s*<a\s+href="([^"]*(?:info\/\d+|content-\d+)[^"]*\.(?:htm|html|shtml))"[^>]*>([\s\S]*?)<\/a>\s*<\/li>/g;
+    let match;
+    while ((match = liRegex.exec(html)) !== null) {
+        const href = match[1];
+        const content = match[2];
+        const link = resolveUrl(href, baseDomain);
+
+        // Extract title from p.info-summary
+        const titleMatch = content.match(/class="[^"]*info-summary[^"]*"[^>]*>([\s\S]*?)<\/p>/);
+        const title = titleMatch ? titleMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+
+        // Extract date from p.date (e.g. 2024年06月02日)
+        let date = '';
+        const dateMatch = content.match(/class="[^"]*date[^"]*"[^>]*>([\s\S]*?)<\/p>/);
+        if (dateMatch) {
+            date = normalizeDate(dateMatch[1].replace(/<[^>]*>/g, '').trim());
+        }
+
+        if (title && link) {
+            items.push({ title, link, date, author: '', thumbnail: '', summary: '' });
         }
     }
 }
