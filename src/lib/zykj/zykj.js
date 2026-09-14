@@ -111,8 +111,8 @@ const ROUTES = [
     { path: '/zykj/wyxy/notice', name: '外国语学院 - 通知公告', desc: '中原科技学院外国语学院通知公告', url: 'https://wyxy.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 原初书院 =====
-    { path: '/zykj/ycsy/news', name: '原初书院 - 团学工作', desc: '中原科技学院原初书院团学工作动态', url: 'https://ycsy.zykj.edu.cn/sydt/txgz.htm', needCover: true, coverFromArticle: false },
-    { path: '/zykj/ycsy/notice', name: '原初书院 - 党建工作', desc: '中原科技学院原初书院党建工作动态', url: 'https://ycsy.zykj.edu.cn/sydt/djgz.htm', needCover: false },
+    { path: '/zykj/ycsy/news', name: '原初书院 - 原初动态', desc: '中原科技学院原初书院原初动态', url: 'https://ycsy.zykj.edu.cn/syxw/ycdt.htm', needCover: true, coverFromArticle: false },
+    { path: '/zykj/ycsy/notice', name: '原初书院 - 通知公告', desc: '中原科技学院原初书院通知公告', url: 'https://ycsy.zykj.edu.cn/syxw/tzgg.htm', needCover: false },
 
     // ===== 教育学院 =====
     { path: '/zykj/jyxy/news', name: '教育学院 - 学院动态', desc: '中原科技学院教育学院学院动态', url: 'https://jyxy.zykj.edu.cn/xwgg/xydt.htm', needCover: true, coverFromArticle: false },
@@ -490,8 +490,8 @@ function parseVsbMainNoticeList(html, baseDomain, items) {
 
 // Parse P8CMS news list (news-tit, news-date, news-summary, news-pic)
 function parseP8cmsNewsList(html, baseDomain, items) {
-    // Items are in <li class="clearfix"> with <a> wrapping
-    const blockRegex = /<li[^>]*class="[^"]*clearfix[^"]*">[\s\S]*?<\/li>/g;
+    // Items are in <li class="clearfix" ...> with <a> wrapping (li may carry extra attrs like id="line_u7_0")
+    const blockRegex = /<li[^>]*class="[^"]*clearfix[^"]*"[^>]*>[\s\S]*?<\/li>/g;
     let match;
     while ((match = blockRegex.exec(html)) !== null) {
         const block = match[0];
@@ -505,9 +505,9 @@ function parseP8cmsNewsList(html, baseDomain, items) {
         const titleMatch = block.match(/class="news-tit[^"]*"[^>]*>([\s\S]*?)<\/dt>/);
         const title = titleMatch ? titleMatch[1].replace(/<[^>]*>/g, '').trim() : '';
 
-        // Extract date
+        // Extract date (ycsy uses Chinese format like 2026年06月11日, normalized by normalizeDate)
         const dateMatch = block.match(/class="news-date[^"]*"[^>]*>([\s\S]*?)<\/dd>/);
-        const date = dateMatch ? dateMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+        const date = dateMatch ? normalizeDate(dateMatch[1].replace(/<[^>]*>/g, '').trim()) : '';
 
         // Extract thumbnail
         const imgMatch = block.match(/class="news-pic[^"]*"[^>]*>[\s\S]*?<img[^>]+src="([^"]+)"/);
