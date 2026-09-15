@@ -18,7 +18,7 @@
 			--checkbox-bg: #e2e8f0;
 			--hover-bg: #f1f5f9;
 			--shadow: 0 1px 3px rgba(0,0,0,0.08);
-			--copy-bg: #f1f5f9;
+
 		}
 		@media (prefers-color-scheme: dark) {
 			:root {
@@ -34,7 +34,6 @@
 				--checkbox-bg: #334155;
 				--hover-bg: #334155;
 				--shadow: 0 1px 3px rgba(0,0,0,0.3);
-				--copy-bg: #334155;
 			}
 		}
 		* { margin: 0; padding: 0; box-sizing: border-box; }
@@ -194,7 +193,9 @@
 			flex-shrink: 0;
 			object-fit: contain;
 		}
-		.route-item .route-name { font-size: 0.92rem; flex: 1; }
+		.route-item .route-name { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.3; }
+		.route-name .route-col { font-size: 0.92rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+		.route-name .route-dept { font-size: 0.72rem; color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 		.route-item .route-tags { display: flex; gap: 0.35rem; }
 		.route-tag {
 			font-size: 0.68rem;
@@ -206,26 +207,20 @@
 		.route-tag.notice { background: rgba(245,158,11,0.15); color: var(--tag-notice); }
 		.route-item .route-path {
 			font-family: "SF Mono", "Fira Code", monospace;
-			font-size: 0.8rem;
+			font-size: 0.78rem;
 			color: var(--accent);
 			background: var(--accent-light);
-			padding: 0.15rem 0.5rem;
+			padding: 0.3rem 0.55rem;
 			border-radius: 0.35rem;
 			white-space: nowrap;
-		}
-		.copy-btn {
-			background: var(--copy-bg);
-			border: none;
-			border-radius: 0.35rem;
-			padding: 0.25rem 0.5rem;
 			cursor: pointer;
-			font-size: 0.75rem;
-			color: var(--text-secondary);
-			transition: all 0.15s;
 			flex-shrink: 0;
+			transition: all 0.15s;
+			-webkit-tap-highlight-color: transparent;
 		}
-		.copy-btn:hover { background: var(--accent); color: white; }
-		.copy-btn.copied { background: var(--tag-news); color: white; }
+		.route-item .route-path:hover { background: var(--accent); color: white; }
+		.route-item .route-path.copied { background: var(--tag-news); color: white; }
+
 		.section-checkbox {
 			width: 18px;
 			height: 18px;
@@ -266,12 +261,49 @@
 			margin-left: auto;
 		}
 		@media (max-width: 640px) {
-			.header h1 { font-size: 1.8rem; }
-			.route-item { flex-wrap: wrap; }
-			.route-item .route-name { width: 100%; order: 1; }
-			.route-item .route-path { font-size: 0.72rem; }
-			.toolbar { flex-direction: column; align-items: stretch; }
-			.toolbar .search-box { width: 100%; }
+			body { -webkit-tap-highlight-color: transparent; }
+			.header { padding: 1.6rem 1rem 1.4rem; }
+			.header h1 { font-size: 1.6rem; }
+			.header p { font-size: 0.95rem; }
+			.header .badge { font-size: 0.75rem; padding: 0.2rem 0.6rem; }
+			.toolbar {
+				position: sticky;
+				top: 0;
+				z-index: 20;
+				flex-direction: row;
+				flex-wrap: wrap;
+				align-items: stretch;
+				gap: 0.5rem;
+				padding: 0.6rem 0.75rem;
+				margin: 0 auto 0.75rem;
+				background: var(--bg);
+				border-bottom: 1px solid var(--border);
+			}
+			.toolbar .search-box { flex: 1 1 100%; min-width: 0; order: 1; }
+			.toolbar .search-box input { font-size: 16px; padding: 0.55rem 1rem 0.55rem 2.25rem; }
+			.toolbar .btn { flex: 1; order: 2; padding: 0.55rem 0.5rem; }
+			.toolbar .select-info { order: 3; flex: 1 1 100%; text-align: center; margin-left: 0; }
+			.container { padding: 0 0.6rem 1rem; }
+			.section { margin-bottom: 1rem; border-radius: 0.6rem; }
+			.section-header { padding: 0.8rem 0.9rem; }
+			.section-header h2 { font-size: 1rem; }
+			.route-item { padding: 0.6rem 0.9rem; gap: 0.55rem; }
+			.route-item .checkbox { width: 22px; height: 22px; }
+			.route-item .favicon { width: 22px; height: 22px; }
+			.route-name .route-col { font-size: 0.9rem; }
+			.route-name .route-dept { font-size: 0.68rem; }
+			.route-tag { display: none; }
+			.route-item .route-path {
+				font-size: 0.7rem;
+				max-width: 38vw;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			.footer { padding: 1.5rem 0.75rem; }
+		}
+		@media (hover: none) {
+			.route-item:hover { background: transparent; }
+			.section-header:hover { background: transparent; }
 		}
 	</style>
 	<!-- IRIS_TRACKER -->
@@ -381,12 +413,12 @@ var basicRoutes = [
 ];
 
 var zykjRoutes = [
-	{path:"/zykj/school/xxyw",name:"学校要闻",type:"news",domain:"www.zykj.edu.cn"},
-	{path:"/zykj/school/kyjj",name:"科研聚焦",type:"news",domain:"www.zykj.edu.cn"},
-	{path:"/zykj/school/jxdt",name:"教学动态",type:"news",domain:"www.zykj.edu.cn"},
-	{path:"/zykj/school/jcfc",name:"基层风采",type:"news",domain:"www.zykj.edu.cn"},
-	{path:"/zykj/school/mtgz",name:"媒体关注",type:"news",domain:"www.zykj.edu.cn"},
-	{path:"/zykj/school/tzgg",name:"通知公告",type:"notice",domain:"www.zykj.edu.cn"},
+	{path:"/zykj/school/xxyw",name:"中原科技学院 - 学校要闻",type:"news",domain:"www.zykj.edu.cn"},
+	{path:"/zykj/school/kyjj",name:"中原科技学院 - 科研聚焦",type:"news",domain:"www.zykj.edu.cn"},
+	{path:"/zykj/school/jxdt",name:"中原科技学院 - 教学动态",type:"news",domain:"www.zykj.edu.cn"},
+	{path:"/zykj/school/jcfc",name:"中原科技学院 - 基层风采",type:"news",domain:"www.zykj.edu.cn"},
+	{path:"/zykj/school/mtgz",name:"中原科技学院 - 媒体关注",type:"news",domain:"www.zykj.edu.cn"},
+	{path:"/zykj/school/tzgg",name:"中原科技学院 - 通知公告",type:"notice",domain:"www.zykj.edu.cn"},
 	{path:"/zykj/lxsy/news",name:"立心书院 - 立心动态",type:"news",domain:"lxsy.zykj.edu.cn"},
 	{path:"/zykj/lxsy/notice",name:"立心书院 - 通知公告",type:"notice",domain:"lxsy.zykj.edu.cn"},
 	{path:"/zykj/jjxy/news",name:"经济学院 - 学院动态",type:"news",domain:"jjxy.zykj.edu.cn"},
@@ -509,7 +541,20 @@ function renderRoutes(routes, containerId, isBasic) {
 
 		var name = document.createElement("span");
 		name.className = "route-name";
-		name.textContent = r.name;
+		var sep = r.name.indexOf(" - ");
+		if (sep > 0) {
+			var col = document.createElement("span");
+			col.className = "route-col";
+			col.textContent = r.name.slice(sep + 3);
+			var dept = document.createElement("span");
+			dept.className = "route-dept";
+			dept.textContent = r.name.slice(0, sep);
+			name.appendChild(col);
+			name.appendChild(dept);
+		} else {
+			name.textContent = r.name;
+		}
+		a.title = r.name;
 		a.appendChild(name);
 
 		var right = document.createElement("div");
@@ -525,25 +570,20 @@ function renderRoutes(routes, containerId, isBasic) {
 		var pathLabel = document.createElement("span");
 		pathLabel.className = "route-path";
 		pathLabel.textContent = r.path;
-		right.appendChild(pathLabel);
-
-		var copyBtn = document.createElement("button");
-		copyBtn.className = "copy-btn";
-		copyBtn.textContent = "复制";
-		copyBtn.onclick = function(e) {
+		pathLabel.title = "点击复制订阅地址";
+		pathLabel.onclick = function(e) {
 			e.stopPropagation();
 			e.preventDefault();
-			var url = window.location.origin + "/rss" + r.path;
-			navigator.clipboard.writeText(url).then(function() {
-				copyBtn.textContent = "已复制";
-				copyBtn.classList.add("copied");
+			copyText(window.location.origin + "/rss" + r.path, function() {
+				pathLabel.textContent = "\u2713 已复制";
+				pathLabel.classList.add("copied");
 				setTimeout(function() {
-					copyBtn.textContent = "复制";
-					copyBtn.classList.remove("copied");
-				}, 1500);
+					pathLabel.textContent = r.path;
+					pathLabel.classList.remove("copied");
+				}, 1400);
 			});
 		};
-		right.appendChild(copyBtn);
+		right.appendChild(pathLabel);
 
 		a.appendChild(right);
 		container.appendChild(a);
@@ -552,6 +592,27 @@ function renderRoutes(routes, containerId, isBasic) {
 
 renderRoutes(basicRoutes, "section-basic-body", true);
 renderRoutes(zykjRoutes, "zykj-routes", false);
+
+// 剪贴板复制：优先 Clipboard API，非安全上下文（http）回退 execCommand
+function copyText(text, cb) {
+	if (navigator.clipboard && window.isSecureContext) {
+		navigator.clipboard.writeText(text).then(function() { cb(true); }).catch(function() { legacyCopy(text, cb); });
+	} else {
+		legacyCopy(text, cb);
+	}
+}
+function legacyCopy(text, cb) {
+	var ta = document.createElement("textarea");
+	ta.value = text;
+	ta.style.cssText = "position:fixed;top:-9999px;opacity:0;";
+	document.body.appendChild(ta);
+	ta.focus();
+	ta.select();
+	var ok = false;
+	try { ok = document.execCommand("copy"); } catch (e) {}
+	document.body.removeChild(ta);
+	cb(ok);
+}
 
 function toggleSection(id) {
 	document.getElementById(id).classList.toggle("collapsed");

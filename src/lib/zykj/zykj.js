@@ -383,6 +383,9 @@ async function parseList(listUrl) {
     } else if (listUrl.includes('job.zykj.edu.cn')) {
         // Job site list
         parseJobList(html, baseDomain, listUrl, items);
+    } else if (html.includes('tl-data') && (html.includes('tl-info') || html.includes('tl-info2'))) {
+        // VSB text-list with calendar date (hr 通知公告)
+        parseVsbTextList(html, baseDomain, items);
     } else {
         // Fallback: try to extract any article-like links
         parseFallbackList(html, baseDomain, items);
@@ -626,6 +629,49 @@ function parseRsxwList(html, baseDomain, items) {
 
         if (title && link) {
             items.push({ title, link, date, author: '', thumbnail, summary });
+        }
+    }
+}
+
+// Parse VSB text-list (hr 通知公告): li > a.dy > div.tl-data(p MM-DD + span YYYY) + div.tl-info2(h3 + p)
+function parseVsbTextList(html, baseDomain, items) {
+    const liRegex = /<li[^>]*>\s*<a\s+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>\s*<\/li>/g;
+    let match;
+    while ((match = liRegex.exec(html)) !== null) {
+        const href = match[1];
+        const content = match[2];
+        // 仅处理文章链接，且条目需含 tl-data（排除导航链接）
+        if (!/(?:info\/\d+\/\d+|content-\d+)/.test(href) || !content.includes('tl-data')) continue;
+        const link = resolveUrl(href, baseDomain);
+
+        // 标题：h3
+        const h3Match = content.match(/<h3[^>]*>([\s\S]*?)<\/h3>/);
+        let title = h3Match ? h3Match[1].replace(/<[^>]*>/g, '').trim() : '';
+
+        // 外链条目标题末尾内嵌日期（如 标题  2021-11-04）剥离为发布日期
+        let date = '';
+        if (title) {
+            const embedded = title.match(/\s*(\d{4}-\d{1,2}-\d{1,2})\s*$/);
+            if (embedded) {
+                date = normalizeDate(embedded[1]);
+                title = title.slice(0, embedded.index).trim();
+            }
+        }
+
+        // tl-data: p=MM-DD + span=YYYY → YYYY-MM-DD
+        if (!date) {
+            const dm = content.match(/class="tl-data"[^>]*>\s*<p>\s*(\d{1,2})-(\d{1,2})\s*<\/p>\s*<span>\s*(\d{4})\s*<\/span>/);
+            if (dm) {
+                date = `${dm[3]}-${dm[1].padStart(2, '0')}-${dm[2].padStart(2, '0')}`;
+            }
+        }
+
+        // 摘要：tl-info2 的 p（可能为附件名）
+        const pMatch = content.match(/class="tl-info2?"[^>]*>[\s\S]*?<h3>[\s\S]*?<\/h3>\s*<p[^>]*>([\s\S]*?)<\/p>/);
+        const summary = pMatch ? pMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+
+        if (title && link) {
+            items.push({ title, link, date, author: '', thumbnail: '', summary });
         }
     }
 }
@@ -1004,6 +1050,11 @@ async function parseArticle(articleUrl) {
         }
     }
 
+    // Strip script/style blocks (e.g. login pages wrap scripts in content divs)
+    if (content) {
+        content = content.replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<style[\s\S]*?<\/style>/gi, '');
+    }
+
     // Get first image from content
     if (content) {
         firstImage = getFirstImage(content, articleUrl);
@@ -1045,8 +1096,37 @@ let deal = async (ctx) => {
         limitedItems.map(
             async (item) => {
                 try {
-                    const article = await parseArticle(item.link);
+                    let article;
+                    // 附件直链（PDF/Office/压缩包）：无文章页可解析，直接给出附件链接
+                    const fileMatch = item.link.match(/\.(pdf|docx?|xlsx?|pptx?|zip|rar)(?:[?#]|$)/i);
+                    if (fileMatch) {
+                        let fileName = decodeURIComponent((item.link.split('/').pop() || '附件').split(/[?#]/)[0]);
+                        // VSB 动态附件（virtual_attach_file.vsb?...&e=.pdf）用真实扩展名重写文件名
+                        const extParam = item.link.match(/[?&]e=\.(\w{2,5})/i);
+                        if (extParam) {
+                            fileName = fileName.replace(/\.[a-z0-9]+$/i, '') + '.' + extParam[1].toLowerCase();
+                        }
+                        article = {
+                            content: `<p>本条目为附件直达链接：<a href="${item.link}" target="_blank" rel="noopener">${fileName}</a>（点击查看或下载）</p>`,
+                            author: '',
+                            date: item.date || '',
+                            firstImage: '',
+                        };
+                    } else {
+                        article = await parseArticle(item.link);
+                    }
+
                     let description = article.content || item.summary || '';
+                    if (!description) {
+                        // 原文被删/需登录/链接失效：给出提示并保留原文链接
+                        description = `<p>原文暂无法读取（可能已被删除、需要登录或链接已变更），请<a href="${item.link}" target="_blank" rel="noopener">点击查看原文</a>。</p>`;
+                    } else {
+                        // 剩余实质文本过短时视为无效内容（防止登录页脚本残留等）
+                        const textOnly = description.replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<style[\s\S]*?<\/style>/gi, '').replace(/<[^>]*>/g, '').replace(/&[a-z]+;/gi, '').trim();
+                        if (textOnly.length < 10 && !/<img[ -￿]*src/i.test(description)) {
+                            description = `<p>原文暂无法读取（可能已被删除、需要登录或链接已变更），请<a href="${item.link}" target="_blank" rel="noopener">点击查看原文</a>。</p>`;
+                        }
+                    }
                     let enclosure = undefined;
 
                     if (config.needCover) {
@@ -1079,7 +1159,7 @@ let deal = async (ctx) => {
                     return {
                         title: item.title,
                         link: item.link,
-                        description: item.summary || '内容获取失败',
+                        description: item.summary || `<p>原文暂无法读取（可能已被删除、需要登录或链接已变更），请<a href="${item.link}" target="_blank" rel="noopener">点击查看原文</a>。</p>`,
                         pubDate: item.date || '',
                         author: deptName,
                     };
