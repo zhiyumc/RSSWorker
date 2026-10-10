@@ -9,6 +9,6 @@ compatibility_flags = ["nodejs_compat"]
 binding = "AnalyticsBinding"
 dataset = "AnalyticsDataset"
 
-# 首页 tracker 注入开关：设置为 Iris 部署地址后生效，如 https://iris-xxx.pages.dev
-# [vars]
-# IRIS_TRACKER_URL = "https://iris-xxx.pages.dev"
+# 首页 tracker 注入开关：设置为 Iris 部署地址后生效（tracker 会向该域名 /send 上报）
+[vars]
+IRIS_TRACKER_URL = "https://wenyuan.indevs.in"
