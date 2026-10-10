@@ -155,7 +155,7 @@ const ROUTES = [
 
     // ===== 教师发展中心 =====
     { path: '/zykj/jsfzzx/news', name: '教师发展中心 - 新闻动态', desc: '中原科技学院教师发展中心（党委教师工作部）新闻动态', url: 'https://jsfzzx.zykj.edu.cn/xwdt.htm', needCover: true, coverFromArticle: true },
-    { path: '/zykj/jsfzzx/notice', name: '教师发展中心 - 通知公告', desc: '中原科技学院教师发展中心（党委教师工作部）通知公告', url: 'https://jsfzzx.zykj.edu.cn/pxxm.htm', needCover: false },
+    { path: '/zykj/jsfzzx/notice', name: '教师发展中心 - 通知公告', desc: '中原科技学院教师发展中心（党委教师工作部）通知公告', url: 'https://jsfzzx.zykj.edu.cn/tzgg.htm', needCover: false },
 
     // ===== 学生发展处 =====
     { path: '/zykj/xgc/gzdt', name: '学生发展处 - 工作动态', desc: '中原科技学院学生发展处工作动态', url: 'https://xgc.zykj.edu.cn/bmdt/gzdt.htm', needCover: true, coverFromArticle: false },
@@ -174,7 +174,7 @@ const ROUTES = [
     { path: '/zykj/tw/tqyx', name: '校团委 - 团情要迅', desc: '中原科技学院校团委团情要迅', url: 'https://tw.zykj.edu.cn/bmdt/tqyx.htm', needCover: true, coverFromArticle: true },
     { path: '/zykj/tw/gzdt', name: '校团委 - 工作动态', desc: '中原科技学院校团委工作动态', url: 'https://tw.zykj.edu.cn/bmdt/gzdt.htm', needCover: true, coverFromArticle: true },
     { path: '/zykj/tw/stfc', name: '校团委 - 社团风采', desc: '中原科技学院校团委社团风采', url: 'https://tw.zykj.edu.cn/zkqn/stfc.htm', needCover: true, coverFromArticle: true },
-    { path: '/zykj/tw/xxsh', name: '校团委 - 校学生会', desc: '中原科技学院校团委校学生会', url: 'https://tw.zykj.edu.cn/zkqn/xxsh.htm', needCover: true, coverFromArticle: true },
+    { path: '/zykj/tw/xxsh', name: '校团委 - 团学动态', desc: '中原科技学院校团委团学动态（原校学生会栏目）', url: 'https://tw.zykj.edu.cn/bmdt.htm', needCover: true, coverFromArticle: true },
     { path: '/zykj/tw/notice', name: '校团委 - 通知公告', desc: '中原科技学院校团委通知公告', url: 'https://tw.zykj.edu.cn/bmdt/tzgg.htm', needCover: false },
 
     // ===== 校长办公室 =====
@@ -231,7 +231,7 @@ const ROUTES = [
     { path: '/zykj/tsg/notice', name: '图书馆 - 通知公告', desc: '中原科技学院图书馆通知公告', url: 'https://tsg.zykj.edu.cn/xwgg/tzgg.htm', needCover: false },
 
     // ===== 学报编辑部 =====
-    { path: '/zykj/xbbjb/xbdt', name: '学报编辑部 - 学报动态', desc: '中原科技学院学报编辑部学报动态', url: 'https://www.zykj.edu.cn/dzjg/xbbjb/xbdt.htm', needCover: true, coverFromArticle: true },
+    { path: '/zykj/xbbjb/xbdt', name: '《应用技术》编辑部 - 编辑部动态', desc: '中原科技学院《应用技术》编辑部动态', url: 'https://www.zykj.edu.cn/dzjg/yyjs_bjb.htm', needCover: true, coverFromArticle: true },
 
     // ===== 心理健康教育中心 =====
     { path: '/zykj/xljkjyzx/gzdt', name: '心理健康教育中心 - 工作动态', desc: '中原科技学院心理健康教育中心工作动态', url: 'https://xljkjyzx.zykj.edu.cn/bmdt/gzdt.htm', needCover: true, coverFromArticle: true },

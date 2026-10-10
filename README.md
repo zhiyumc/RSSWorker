@@ -142,7 +142,7 @@ RSSWorker 是一个轻量级的 RSS 订阅工具，可以部署在 Cloudflare Wo
 | `/zykj/tw/tqyx` | 校团委 - 团情要迅 | 是 |
 | `/zykj/tw/gzdt` | 校团委 - 工作动态 | 是 |
 | `/zykj/tw/stfc` | 校团委 - 社团风采 | 是 |
-| `/zykj/tw/xxsh` | 校团委 - 校学生会 | 是 |
+| `/zykj/tw/xxsh` | 校团委 - 团学动态 | 是 |
 | `/zykj/tw/notice` | 校团委 - 通知公告 | 否 |
 | `/zykj/dzb/bmdt` | 校长办公室 - 部门动态 | 是 |
 | `/zykj/dzb/notice` | 校长办公室 - 通知公告 | 否 |
@@ -190,7 +190,7 @@ RSSWorker 是一个轻量级的 RSS 订阅工具，可以部署在 Cloudflare Wo
 | `/zykj/nic/notice` | 信息化建设与管理中心 - 通知公告 | 否 |
 | `/zykj/tsg/news` | 图书馆 - 新闻动态 | 是 |
 | `/zykj/tsg/notice` | 图书馆 - 通知公告 | 否 |
-| `/zykj/xbbjb/xbdt` | 学报编辑部 - 学报动态 | 是 |
+| `/zykj/xbbjb/xbdt` | 《应用技术》编辑部 - 编辑部动态 | 是 |
 | `/zykj/xljkjyzx/gzdt` | 心理健康教育中心 - 工作动态 | 是 |
 | `/zykj/xljkjyzx/hdy` | 心理健康教育中心 - 心理健康活动月 | 是 |
 | `/zykj/xljkjyzx/notice` | 心理健康教育中心 - 通知公告 | 否 |
