@@ -362,8 +362,8 @@ async function parseList(listUrl) {
     } else if (html.includes('"news-tit') || html.includes("'news-tit")) {
         // P8CMS news list with news-tit (lxsy, dysy, ztsy, ycsy)
         parseP8cmsNewsList(html, baseDomain, items);
-    } else if (html.includes('zsjz_list1') || html.includes('mtgz_list1')) {
-        // VSB/P8CMS simple list (zsjz_list1)
+    } else if (html.includes('zsjz_list1') || html.includes('mtgz_list1') || html.includes('mtxw_list1')) {
+        // VSB/P8CMS simple list (zsjz_list1 / mtgz_list1 / mtxw_list1)
         parseZsjzList(html, baseDomain, items);
     } else if (html.includes('rsxw_list1')) {
         // VSB sub-site rsxw_list1 list with pic + days/month date (tsg news)
@@ -380,6 +380,9 @@ async function parseList(listUrl) {
     } else if (html.includes('news_list1_box') && !html.includes('mtgz_list1') && !html.includes('zsjz_list1')) {
         // VSB main site notice list (item/date/text2)
         parseVsbMainNoticeList(html, baseDomain, items);
+    } else if (html.includes('lsim') || html.includes('<div class="date">')) {
+        // VSB sub-site lsim/date list: li > a > div.date1|div.date (day+year) + div.imgs + div.zi (h4 + p)
+        parseLsimList(html, baseDomain, items);
     } else if (listUrl.includes('job.zykj.edu.cn')) {
         // Job site list
         parseJobList(html, baseDomain, listUrl, items);
@@ -528,7 +531,7 @@ function parseP8cmsNewsList(html, baseDomain, items) {
 // Parse zsjz_list1 (simple list: dd > a > div.tt + div.time)
 function parseZsjzList(html, baseDomain, items) {
     // Extract list sections (zsjz_list1 or mtgz_list1) to avoid matching nav links
-    const sectionRegex = /class="[^"]*(?:zsjz_list1|mtgz_list1)[^"]*"[^>]*>([\s\S]*?)<\/dl>/g;
+    const sectionRegex = /class="[^"]*(?:zsjz_list1|mtgz_list1|mtxw_list1)[^"]*"[^>]*>([\s\S]*?)<\/dl>/g;
     let sectionMatch;
     let sectionHtml = '';
     while ((sectionMatch = sectionRegex.exec(html)) !== null) {
@@ -544,12 +547,20 @@ function parseZsjzList(html, baseDomain, items) {
         const link = resolveUrl(href, baseDomain);
 
         // Extract title from div.tt
-        const titleMatch = content.match(/class="tt[^"]*"[^>]*>([\s\S]*?)<\/div>/);
+        // Extract title from div.tt (zsjz/mtgz) or div.mtxw_list1_tt (mtxw)
+        const titleMatch = content.match(/class="(?:tt|mtxw_list1_tt)[^"]*"[^>]*>([\s\S]*?)<\/div>/);
         const title = titleMatch ? titleMatch[1].replace(/<[^>]*>/g, '').trim() : '';
 
-        // Extract date from div.time
+        // Extract date from div.time (zsjz/mtgz) or days+month divs (mtxw, e.g. days=30 month=2026.09)
         const dateMatch = content.match(/class="time[^"]*"[^>]*>([\s\S]*?)<\/div>/);
-        const date = dateMatch ? normalizeDate(dateMatch[1]) : '';
+        let date = dateMatch ? normalizeDate(dateMatch[1]) : '';
+        if (!date) {
+            const daysMatch = content.match(/class="days[^"]*"[^>]*>\s*(\d{1,2})/);
+            const monthMatch = content.match(/class="month[^"]*"[^>]*>\s*(\d{4})[.-](\d{1,2})/);
+            if (daysMatch && monthMatch) {
+                date = `${monthMatch[1]}-${monthMatch[2].padStart(2, '0')}-${daysMatch[1].padStart(2, '0')}`;
+            }
+        }
 
         if (title && link) {
             items.push({ title, link, date, author: '', thumbnail: '' });
@@ -633,6 +644,48 @@ function parseRsxwList(html, baseDomain, items) {
     }
 }
 
+// Parse VSB sub-site lsim/date list: li > a > div.date1|div.date (div.day + div.year) + div.imgs + div.zi (h4 + p)
+// Covers: xwzx/dzb bmdt (ul.lsim + div.date1) and xwzx/dzb notice (li with div.date), with or without cover image
+function parseLsimList(html, baseDomain, items) {
+    const liRegex = /<li[^>]*>\s*<a\s+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>\s*<\/li>/g;
+    let match;
+    while ((match = liRegex.exec(html)) !== null) {
+        const href = match[1];
+        const content = match[2];
+        // Only items containing div.zi (exclude nav links)
+        if (!/<div class="zi">/.test(content)) continue;
+        const link = resolveUrl(href, baseDomain);
+
+        // Title: h4 inside div.zi
+        const titleMatch = content.match(/<h4[^>]*>([\s\S]*?)<\/h4>/);
+        const title = titleMatch ? titleMatch[1].replace(/<[^>]*>/g, '').trim() : '';
+
+        // Date: div.day (DD) + div.year (YYYY-MM)
+        let date = '';
+        const dayMatch = content.match(/class="day"[^>]*>\s*(\d{1,2})/);
+        const yearMatch = content.match(/class="year"[^>]*>\s*(\d{4})-(\d{1,2})/);
+        if (dayMatch && yearMatch) {
+            date = `${yearMatch[1]}-${yearMatch[2].padStart(2, '0')}-${dayMatch[1].padStart(2, '0')}`;
+        }
+
+        // Summary: p inside div.zi
+        const pMatch = content.match(/<p[^>]*>([\s\S]*?)<\/p>/);
+        const summary = pMatch ? pMatch[1].replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim() : '';
+
+        // Thumbnail: img inside div.imgs (may be absent on notice pages)
+        const imgMatch = content.match(/<img[^>]+src="([^"]+)"/);
+        let thumbnail = '';
+        if (imgMatch) {
+            const src = imgMatch[1];
+            thumbnail = src.startsWith('http') ? src : (src.startsWith('/') ? baseDomain + src : resolveUrl(src, baseDomain));
+        }
+
+        if (title && link) {
+            items.push({ title, link, date, author: '', thumbnail, summary });
+        }
+    }
+}
+
 // Parse VSB text-list (hr 通知公告): li > a.dy > div.tl-data(p MM-DD + span YYYY) + div.tl-info2(h3 + p)
 function parseVsbTextList(html, baseDomain, items) {
     const liRegex = /<li[^>]*>\s*<a\s+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>\s*<\/li>/g;
@@ -704,12 +757,16 @@ function parseInfoList(html, baseDomain, items) {
 
 // Parse VSB sub-site timg-list (xgc, xyh)
 function parseVsbSubTimgList(html, baseDomain, items) {
-    // Use full HTML and filter by article-like hrefs
-    const liRegex = /<li[^>]*>\s*<a\s+href="([^"]*(?:info\/\d+|content-\d+)[^"]*\.(?:htm|html|shtml))"[^>]*>([\s\S]*?)<\/a>\s*<\/li>/g;
+    // Use full HTML. Accept article-like site links and external http(s) article links
+    // (e.g. mp.weixin.qq.com), but require an h3/h4 title inside to exclude nav items.
+    const liRegex = /<li[^>]*>\s*<a\s+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>\s*<\/li>/g;
     let match;
     while ((match = liRegex.exec(html)) !== null) {
         const href = match[1];
         const content = match[2];
+        const isArticleLike = /(?:info\/\d+|content-\d+)[^"]*\.(?:htm|html|shtml)/.test(href);
+        const isExternalArticle = /^https?:\/\//i.test(href) && /<h[34][^>]*>/.test(content) && !/(?:index\.(?:htm|html)|javascript:)/i.test(href);
+        if (!isArticleLike && !isExternalArticle) continue;
         const link = resolveUrl(href, baseDomain);
 
         // Extract title from h3/i

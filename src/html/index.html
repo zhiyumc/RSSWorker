@@ -17,7 +17,8 @@
 			--tag-notice: #f59e0b;
 			--checkbox-bg: #e2e8f0;
 			--hover-bg: #f1f5f9;
-			--shadow: 0 1px 3px rgba(0,0,0,0.08);
+			--shadow: 0 1px 2px rgba(15,23,42,0.04), 0 4px 14px rgba(15,23,42,0.05);
+			--shadow-hover: 0 2px 6px rgba(15,23,42,0.06), 0 10px 28px rgba(15,23,42,0.09);
 
 		}
 		@media (prefers-color-scheme: dark) {
@@ -33,32 +34,53 @@
 				--tag-notice: #f59e0b;
 				--checkbox-bg: #334155;
 				--hover-bg: #334155;
-				--shadow: 0 1px 3px rgba(0,0,0,0.3);
+				--shadow: 0 1px 2px rgba(0,0,0,0.25), 0 4px 14px rgba(0,0,0,0.2);
+				--shadow-hover: 0 2px 6px rgba(0,0,0,0.35), 0 10px 28px rgba(0,0,0,0.3);
 			}
 		}
 		* { margin: 0; padding: 0; box-sizing: border-box; }
 		body {
 			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
 			background: var(--bg);
+			background-image: linear-gradient(180deg, rgba(37,99,235,0.05) 0%, rgba(37,99,235,0.015) 340px, transparent 520px);
 			color: var(--text);
 			line-height: 1.6;
 			transition: background 0.2s, color 0.2s;
 		}
+		::selection { background: var(--accent); color: #fff; }
+		::-webkit-scrollbar { width: 10px; height: 10px; }
+		::-webkit-scrollbar-track { background: transparent; }
+		::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; border: 2px solid var(--bg); }
+		::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
 		.header {
-			background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+			background: linear-gradient(135deg, #16324f 0%, #2563eb 55%, #4f46e5 115%);
 			color: white;
 			padding: 2.5rem 1rem;
 			text-align: center;
+			position: relative;
+			overflow: hidden;
 		}
-		.header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-		.header p { font-size: 1.1rem; opacity: 0.9; }
-		.header .badges { margin-top: 1rem; display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+		.header::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background:
+				radial-gradient(ellipse 620px 240px at 18% -20%, rgba(255,255,255,0.16), transparent 70%),
+				radial-gradient(ellipse 520px 260px at 85% 130%, rgba(255,255,255,0.10), transparent 70%);
+			pointer-events: none;
+		}
+		.header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; letter-spacing: 0.02em; position: relative; }
+		.header p { font-size: 1.1rem; opacity: 0.9; position: relative; }
+		.header .badges { margin-top: 1rem; display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; position: relative; }
 		.header .badge {
-			background: rgba(255,255,255,0.15);
+			background: rgba(255,255,255,0.14);
+			border: 1px solid rgba(255,255,255,0.18);
 			padding: 0.25rem 0.75rem;
 			border-radius: 1rem;
 			font-size: 0.85rem;
+			transition: background 0.15s;
 		}
+		.header .badge:hover { background: rgba(255,255,255,0.26); }
 		.toolbar {
 			max-width: 1000px;
 			margin: 1rem auto;
@@ -121,7 +143,9 @@
 			margin-bottom: 1.5rem;
 			overflow: hidden;
 			box-shadow: var(--shadow);
+			transition: box-shadow 0.2s, transform 0.2s;
 		}
+		.section:hover { box-shadow: var(--shadow-hover); }
 		.section-header {
 			padding: 0.85rem 1.25rem;
 			border-bottom: 1px solid var(--border);
@@ -156,10 +180,23 @@
 			padding: 0.5rem 1.25rem;
 			text-decoration: none;
 			color: var(--text);
-			transition: background 0.1s;
+			transition: background 0.15s, box-shadow 0.15s;
 			gap: 0.6rem;
+			position: relative;
+		}
+		.route-item::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+			bottom: 0;
+			width: 2px;
+			background: var(--accent);
+			opacity: 0;
+			transition: opacity 0.15s;
 		}
 		.route-item:hover { background: var(--hover-bg); }
+		.route-item:hover::before { opacity: 1; }
 		.route-item .checkbox {
 			width: 18px;
 			height: 18px;
@@ -176,6 +213,7 @@
 		.route-item .checkbox.checked {
 			background: var(--accent);
 			border-color: var(--accent);
+			animation: checkbox-pop 0.18s ease;
 		}
 		.route-item .checkbox.checked::after {
 			content: "";
@@ -199,12 +237,23 @@
 		.route-item .route-tags { display: flex; gap: 0.35rem; }
 		.route-tag {
 			font-size: 0.68rem;
-			padding: 0.1rem 0.4rem;
-			border-radius: 0.35rem;
+			padding: 0.12rem 0.5rem;
+			border-radius: 1rem;
 			font-weight: 600;
+			display: inline-flex;
+			align-items: center;
+			gap: 0.28rem;
+			flex-shrink: 0;
 		}
-		.route-tag.news { background: rgba(16,185,129,0.15); color: var(--tag-news); }
-		.route-tag.notice { background: rgba(245,158,11,0.15); color: var(--tag-notice); }
+		.route-tag::before {
+			content: "";
+			width: 5px;
+			height: 5px;
+			border-radius: 50%;
+			background: currentColor;
+		}
+		.route-tag.news { background: rgba(16,185,129,0.13); color: var(--tag-news); }
+		.route-tag.notice { background: rgba(245,158,11,0.13); color: var(--tag-notice); }
 		.route-item .route-path {
 			font-family: "SF Mono", "Fira Code", monospace;
 			font-size: 0.78rem;
@@ -247,11 +296,16 @@
 			transform: rotate(45deg);
 			margin-top: -2px;
 		}
+		@keyframes checkbox-pop {
+			50% { transform: scale(1.18); }
+		}
 		.footer {
 			text-align: center;
 			padding: 2rem 1rem;
 			color: var(--text-secondary);
 			font-size: 0.9rem;
+			border-top: 1px solid var(--border);
+			margin-top: 1rem;
 		}
 		.footer a { color: var(--accent); text-decoration: none; }
 		.hidden { display: none !important; }
@@ -562,10 +616,12 @@ function renderRoutes(routes, containerId, isBasic) {
 		right.style.alignItems = "center";
 		right.style.gap = "0.5rem";
 
-		var tag = document.createElement("span");
-		tag.className = "route-tag " + (r.type === "news" ? "news" : "notice");
-		tag.textContent = r.type === "news" ? "新闻" : "公告";
-		right.appendChild(tag);
+		if (!isBasic) {
+			var tag = document.createElement("span");
+			tag.className = "route-tag " + (r.type === "news" ? "news" : "notice");
+			tag.textContent = r.type === "news" ? "新闻" : "公告";
+			right.appendChild(tag);
+		}
 
 		var pathLabel = document.createElement("span");
 		pathLabel.className = "route-path";
